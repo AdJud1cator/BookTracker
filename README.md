@@ -19,7 +19,7 @@ An application that tracks books
 - [ ] Share reviews with friends or the community
 
 ## Reading Goals & Statistics
-- [ ] Set yearly, mothly and daily reading goals
+- [ ] Set yearly, mothly, daily and custom (A specific date like New Years, Christmas or the last day of a vacation) reading goals
 - [ ] View stats like books read, pages tracked, and reading speed
 - [ ] Receive reminders
 
