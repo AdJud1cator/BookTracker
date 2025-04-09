@@ -12,6 +12,7 @@ An application that tracks books
 - [ ] Add books to "Want to Read," "Reading," or "Finished" lists
 - [ ] Create custom shelves for categorization (by genres, favourites or bookmarks)
 - [ ] Track reading progress with percentage completion
+- [ ] Have a "Last Read" or "Recently Read" section (maybe in the profile or navbar)
 
 ## Notes & Reviews
 - [ ] Write and save personal notes for each book
