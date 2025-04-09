@@ -31,6 +31,7 @@ An application that tracks books
 
 ## Syncing
 - [ ] Sync reading progress across devices
+- [ ] Book/Ebook sites integration: Get links to order or read books based on the title
 - [ ] Export reading history & notes
 
 ## Themes
