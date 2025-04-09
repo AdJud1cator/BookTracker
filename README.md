@@ -10,7 +10,7 @@ An application that tracks books
 ## Personal Library Management
 - [ ] Create a personal user profile
 - [ ] Add books to "Want to Read," "Reading," or "Finished" lists
-- [ ] Create custom shelves for categorization
+- [ ] Create custom shelves for categorization (by genres, favourites or bookmarks)
 - [ ] Track reading progress with percentage completion
 
 ## Notes & Reviews
