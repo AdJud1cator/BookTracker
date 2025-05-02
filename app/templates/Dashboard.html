@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>Dashboard | Book Tracker</title>
+{% endblock %}
+
+{% block body %}
+
+<body class="bg-gray-50 min-h-screen">
+  <main class="min-h-screen bg-gray-100 p-6">
+    <div class="flex justify-center mb-4">
+      <img src="{{ url_for('static', filename='img/BookTracker.png') }}" alt="BookTracker Logo" class="w-32 h-32">
+    </div>
+
+    <h1 class="text-2xl font-bold text-center mb-8">Welcome to BookTracker</h1>
+
+    <!-- Thumbnail Navigation -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 max-w-6xl mx-auto">
+      <!-- One Thumbnail Item -->
+      <a href="{{ url_for('library') }}"
+        class="bg-white rounded-lg shadow-md hover:shadow-lg transition p-4 flex flex-col items-center text-blue-600">
+        <img src="{{ url_for('static', filename='img/Library.png') }}" alt="Library" class="w-12 h-12 mb-2">
+        <span class="text-sm font-medium">Library</span>
+      </a>
+
+      <a href="{{ url_for('add') }}"
+        class="bg-white rounded-lg shadow-md hover:shadow-lg transition p-4 flex flex-col items-center text-blue-600">
+        <img src="{{ url_for('static', filename='img/Add.png') }}" alt="Add Book" class="w-12 h-12 mb-2">
+        <span class="text-sm font-medium">Add Book</span>
+      </a>
+
+      <a href="{{ url_for('statistics') }}"
+        class="bg-white rounded-lg shadow-md hover:shadow-lg transition p-4 flex flex-col items-center text-blue-600">
+        <img src="{{ url_for('static', filename='img/Stats.png') }}" alt="Stats" class="w-12 h-12 mb-2">
+        <span class="text-sm font-medium">Stats</span>
+      </a>
+
+      <a href="{{ url_for('share') }}"
+        class="bg-white rounded-lg shadow-md hover:shadow-lg transition p-4 flex flex-col items-center text-blue-600">
+        <img src="{{ url_for('static', filename='img/Share.png') }}" alt="Share" class="w-12 h-12 mb-2">
+        <span class="text-sm font-medium">Share</span>
+      </a>
+
+      <a href="{{ url_for('login') }}"
+        class="bg-white rounded-lg shadow-md hover:shadow-lg transition p-4 flex flex-col items-center text-blue-600">
+        <img src="{{ url_for('static', filename='img/Logout.png') }}" alt="Logout" class="w-12 h-12 mb-2">
+        <span class="text-sm font-medium">Logout</span>
+      </a>
+    </div>
+  </main>
+
+
+</body>
+
+{% endblock %}
