@@ -1,5 +1,21 @@
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from config import Config
 
-app = Flask(__name__)
+db = SQLAlchemy()
+migrate = Migrate()
 
-from . import routes
+
+def create_app():
+    global app
+    app = Flask(__name__)
+    app.config.from_object(Config)
+
+    db.init_app(app)
+    migrate.init_app(app, db)
+
+    from . import models
+    from . import routes
+    
+    return app
