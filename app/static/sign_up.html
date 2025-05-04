@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --bg-color: #f7f7f7;
+            --container-bg: #fff;
+            --text-color: #222;
+            --accent: #2e2b4f;
+            --footer-color: #888;
+            --input-bg: #fff;
+            --input-border: #ccc;
+            --button-bg: #2e2b4f;
+            --button-text: #fff;
+        }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background 0.2s, color 0.2s;
+        }
+        .container {
+            width: 100%;
+            max-width: 400px;
+            margin: 60px auto;
+            background: var(--container-bg);
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            padding: 32px 24px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .header h2 {
+            margin: 0 0 8px 0;
+            font-weight: 600;
+            color: var(--accent);
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            border-radius: 6px;
+            border: 1px solid var(--input-border);
+            background: var(--input-bg);
+            font-size: 1em;
+            box-sizing: border-box;
+            color: var(--text-color);
+        }
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button[type="submit"]:hover {
+            background: #4b4771;
+        }
+        .links {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 0.97em;
+        }
+        .links a {
+            color: var(--accent);
+            text-decoration: none;
+            margin: 0 6px;
+            transition: color 0.2s;
+        }
+        .links a:hover {
+            color: #4b4771;
+            text-decoration: underline;
+        }
+        .footer {
+            text-align: center;
+            color: var(--footer-color);
+            margin-top: 40px;
+            font-size: 0.95em;
+            cursor: pointer;
+            user-select: none;
+        }
+        .footer a {
+            color: var(--accent);
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        /* Dark mode styles */
+        body.dark-mode {
+            --bg-color: #181824;
+            --container-bg: #232336;
+            --text-color: #f3f3f3;
+            --accent: #b7b6f7;
+            --footer-color: #aaa;
+            --input-bg: #232336;
+            --input-border: #44445a;
+            --button-bg: #44445a;
+            --button-text: #f3f3f3;
+        }
+        @media (max-width: 500px) {
+            .container {
+                margin: 32px 8px;
+                padding: 24px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Sign Up</h2>
+            <p>Create your free account</p>
+        </div>
+        <form>
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required autofocus>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="confirm_password">Confirm Password</label>
+            <input type="password" id="confirm_password" name="confirm_password" required>
+
+            <button type="submit">Sign Up</button>
+        </form>
+        <div class="links">
+            <a href="#">Already have an account? Sign In</a>
+        </div>
+    </div>
+    <div class="footer" id="darkModeToggle">
+        By using BookTracker, you agree to our use of cookies.<br>
+        <a>Dark Mode: <span id="darkModeStatus">Off</span></a> · <a href="#">Find out more</a>
+    </div>
+    <script>
+        // Toggle dark mode on footer click
+        const toggle = document.getElementById('darkModeToggle');
+        const status = document.getElementById('darkModeStatus');
+        toggle.addEventListener('click', function(e) {
+            if (e.target.tagName === 'A' && e.target.textContent.startsWith('Dark Mode')) {
+                document.body.classList.toggle('dark-mode');
+                status.textContent = document.body.classList.contains('dark-mode') ? 'On' : 'Off';
+            }
+        });
+    </script>
+</body>
+</html>
