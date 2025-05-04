@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Explore Books</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --bg-color: #f7f7f7;
+            --container-bg: #fff;
+            --text-color: #222;
+            --accent: #2e2b4f;
+            --footer-color: #888;
+            --input-bg: #fff;
+            --input-border: #ccc;
+            --button-bg: #2e2b4f;
+            --button-text: #fff;
+            --card-bg: #f9f9f9;
+        }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background 0.2s, color 0.2s;
+        }
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 40px auto 0 auto;
+            background: var(--container-bg);
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            padding: 32px 24px;
+        }
+        h2 {
+            margin-top: 0;
+            color: var(--accent);
+        }
+        .search-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+        .search-bar input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid var(--input-border);
+            background: var(--input-bg);
+            font-size: 1em;
+        }
+        .search-bar button {
+            padding: 10px 18px;
+            background: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .search-bar button:hover {
+            background: #4b4771;
+        }
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 22px;
+            margin-bottom: 28px;
+        }
+        .book-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 320px;
+        }
+        .book-card img {
+            width: 110px;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            background: #eee;
+        }
+        .book-title {
+            font-size: 1.05em;
+            font-weight: 600;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+        .book-author {
+            font-size: 0.97em;
+            color: #555;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        .book-desc {
+            font-size: 0.93em;
+            color: #444;
+            text-align: center;
+            margin-bottom: 6px;
+            max-height: 60px;
+            overflow: hidden;
+        }
+        .footer {
+            text-align: center;
+            color: var(--footer-color);
+            margin-top: 40px;
+            font-size: 0.95em;
+            cursor: pointer;
+            user-select: none;
+        }
+        .footer a {
+            color: var(--accent);
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        /* Dark mode styles */
+        body.dark-mode {
+            --bg-color: #181824;
+            --container-bg: #232336;
+            --text-color: #f3f3f3;
+            --accent: #b7b6f7;
+            --footer-color: #aaa;
+            --input-bg: #232336;
+            --input-border: #44445a;
+            --button-bg: #44445a;
+            --button-text: #f3f3f3;
+            --card-bg: #232336;
+        }
+        @media (max-width: 700px) {
+            .container {
+                padding: 18px 4px;
+            }
+            .books-grid {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Explore Books</h2>
+        <form class="search-bar" id="searchForm">
+            <input type="text" id="searchInput" placeholder="Search for books by title, author, or keyword..." autocomplete="off">
+            <button type="submit">Search</button>
+        </form>
+        <h3 id="resultsTitle">Trending Books</h3>
+        <div class="books-grid" id="booksGrid"></div>
+    </div>
+    <div class="footer" id="darkModeToggle">
+        Explore powered by Google Books API.<br>
+        <a>Dark Mode: <span id="darkModeStatus">Off</span></a>
+    </div>
+    <script>
+        // Utility to fetch books from Google Books API
+        async function fetchBooks(query, maxResults = 15, orderBy = 'relevance') {
+            const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=${maxResults}&orderBy=${orderBy}`;
+            const resp = await fetch(url);
+            const data = await resp.json();
+            return (data.items || []);
+        }
+
+        // Render books to the grid
+        function renderBooks(books) {
+            const grid = document.getElementById('booksGrid');
+            grid.innerHTML = '';
+            if (books.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color:#888;">No books found.</p>';
+                return;
+            }
+            books.forEach(book => {
+                const info = book.volumeInfo || {};
+                const img = (info.imageLinks && info.imageLinks.thumbnail) || 'https://via.placeholder.com/110x160?text=No+Cover';
+                const title = info.title || 'No Title';
+                const authors = (info.authors && info.authors.join(', ')) || 'Unknown Author';
+                const desc = info.description ? info.description.substring(0, 80) + (info.description.length > 80 ? '…' : '') : '';
+                const card = document.createElement('div');
+                card.className = 'book-card';
+                card.innerHTML = `
+                    <img src="${img}" alt="Book cover">
+                    <div class="book-title">${title}</div>
+                    <div class="book-author">${authors}</div>
+                    <div class="book-desc">${desc}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Initial trending books (using "bestsellers" as a stand-in for trending)
+        async function loadTrendingBooks() {
+            document.getElementById('resultsTitle').textContent = 'Trending Books';
+            const trendingBooks = await fetchBooks('bestsellers', 16, 'relevance');
+            renderBooks(trendingBooks);
+        }
+
+        // Search handler
+        document.getElementById('searchForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) {
+                loadTrendingBooks();
+                return;
+            }
+            document.getElementById('resultsTitle').textContent = `Search Results for "${query}"`;
+            const books = await fetchBooks(query, 15, 'relevance');
+            renderBooks(books);
+        });
+
+        // Dark mode toggle
+        const toggle = document.getElementById('darkModeToggle');
+        const status = document.getElementById('darkModeStatus');
+        toggle.addEventListener('click', function(e) {
+            if (e.target.tagName === 'A' && e.target.textContent.startsWith('Dark Mode')) {
+                document.body.classList.toggle('dark-mode');
+                status.textContent = document.body.classList.contains('dark-mode') ? 'On' : 'Off';
+            }
+        });
+
+        // Load trending books on page load
+        loadTrendingBooks();
+    </script>
+</body>
+</html>
