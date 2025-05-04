@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>BookTracker - Your Reading Journey</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/sample_2.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">BookTracker</div>
+            <div class="nav-links">
+                <a href="#">Sign In</a> ·
+                <a href="#">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h2>Welcome to BookTracker</h2>
+            <p>Your personal reading journey starts here</p>
+        </div>
+
+        <div class="search-box">
+            <h3>Find your next great read</h3>
+            <div class="search-form">
+                <input type="text" placeholder="Search by title, author, or ISBN...">
+                <button type="submit">Search</button>
+            </div>
+        </div>
+
+        <div class="sign-invitation">
+            <p>Ready to start your reading journey?</p>
+            <div class="action-buttons">
+                <a href="#" class="primary-button">Sign Up</a>
+                <a href="#" class="secondary-button">Sign In</a>
+            </div>
+        </div>
+
+        <div class="features">
+            <h3>Features</h3>
+            <ul>
+                <li>Track books you've read and want to read</li>
+                <li>Discover new books based on your preferences</li>
+                <li>Connect with other readers and share recommendations</li>
+                <li>Get personalized reading statistics and insights</li>
+            </ul>
+        </div>
+
+        <div class="faq-section">
+            <h3>Frequently Asked Questions</h3>
+            <div class="faq-item">
+                <h4>How do I add books to my library?</h4>
+                <p>You can search for books by title, author, or scan a barcode with your device camera.</p>
+            </div>
+            <div class="faq-item">
+                <h4>Is BookTracker free to use?</h4>
+                <p>Yes! BookTracker is completely free with all core features available to everyone.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer" id="darkModeToggle">
+        <div class="footer-links">
+            <a href="#">Terms & Conditions</a> ·
+            <a href="#">Privacy Policy</a> ·
+            <a href="#">Copyright</a> ·
+            <a href="#">Contact</a> ·
+            <a href="#">Team Info</a>
+        </div>
+        <div class="social-links">
+            <a href="#">Facebook</a> ·
+            <a href="#">Twitter</a> ·
+            <a href="#">Instagram</a>
+        </div>
+        <div>
+            <a href="#" id="darkModeToggleLink"><span id="darkModeStatus">Dark Mode</span></a> · <a href="#">Find out more</a>
+        </div>
+
+    </div>
+
+    <script>
+        const toggle = document.getElementById('darkModeToggle');
+        const status = document.getElementById('darkModeStatus');
+        const toggleLink = document.getElementById('darkModeToggleLink');
+
+        function updateDarkModeText() {
+            if (document.body.classList.contains('dark-mode')) {
+                status.textContent = 'Light Mode';
+            } else {
+                status.textContent = 'Dark Mode';
+            }
+        }
+
+        // Initialize on page load
+        updateDarkModeText();
+
+        toggle.addEventListener('click', function (e) {
+            if (e.target === toggleLink || toggleLink.contains(e.target)) {
+                e.preventDefault();
+                document.body.classList.toggle('dark-mode');
+                updateDarkModeText();
+            }
+        });
+    </script>
+</body>
+
+</html>
