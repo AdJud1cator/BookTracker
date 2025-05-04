@@ -16,9 +16,9 @@
     &larr; Back
   </a>
 
-  <form action="{{ url_for('add') }}" method="post" class="space-y-4">
-    <input type="text" name="title" placeholder="Book Title" class="w-full px-4 py-2 border rounded">
-    <input type="text" name="author" placeholder="Author" class="w-full px-4 py-2 border rounded">
+  <form action="{{ url_for('add_book') }}" method="post" class="space-y-4">
+    <input type="text" name="title" placeholder="Book Title" class="w-full px-4 py-2 border rounded" required>
+    <input type="text" name="author" placeholder="Author" class="w-full px-4 py-2 border rounded" required>
 
     <!-- Genre Select -->
     <select name="genre" class="w-full px-4 py-2 border rounded text-gray-700">

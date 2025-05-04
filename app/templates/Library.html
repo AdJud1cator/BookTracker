@@ -16,57 +16,26 @@
     &larr; Back
   </a>
 
-
   <div class="overflow-x-auto">
     <table class="min-w-full divide-y divide-gray-200">
-      <thead class="bg-gray-50">
-        <tr>
+      <thead class="bg-gray-50"></thead>
+      <tr>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Author</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Details</th>
-        </tr>
-      </thead>
-      <tbody class="bg-white divide-y divide-gray-200">
-        <tr>
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">The Great Gatsby</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">F. Scott Fitzgerald</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm">
-            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-              Reading
-            </span>
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm">
-            <a href="{{ url_for('details') }}" class="text-blue-500 hover:underline">View Details</a>
-          </td>
-        </tr>
-        <tr>
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">1984</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">George Orwell</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm">
-            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-              Finished
-            </span>
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm">
-            <a href="{{ url_for('details') }}" class="text-blue-500 hover:underline">View Details</a>
-          </td>
-        </tr>
-        <tr>
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">To Kill a Mockingbird</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Harper Lee</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm">
-            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-              Next
-            </span>
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm">
-            <a href="{{ url_for('details') }}" class="text-blue-500 hover:underline">View Details</a>
-          </td>
-        </tr>
-      </tbody>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Genre</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Description</th>
+      </tr>
+      {% for book in books %}
+      <tr>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ book.title }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ book.author }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ book.genre }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ book.description }}</td>
+      </tr>
+      {% endfor %}
     </table>
   </div>
+
 </body>
 
 {% endblock %}
