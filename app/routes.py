@@ -1,12 +1,16 @@
-from flask import render_template
+from flask import redirect, render_template, request, url_for
 from app import app
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def login():
+    if request.method == "POST":
+        return redirect(url_for('dashboard'))
     return render_template("Login.html")
 
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def register():
+    if request.method == "POST":
+        return redirect(url_for('login'))
     return render_template("Register.html")
 
 @app.route('/dashboard')
@@ -17,16 +21,20 @@ def dashboard():
 def library():
     return render_template("Library.html")
 
-@app.route('/add')
+@app.route('/add', methods=['GET', 'POST'])
 def add():
+    if request.method == "POST":
+        return redirect(url_for('dashboard'))
     return render_template("AddBook.html")
 
 @app.route('/statistics')
 def statistics():
     return render_template("Statistics.html")
 
-@app.route('/share')
+@app.route('/share', methods=['GET', 'POST'])
 def share():
+    if request.method == "POST":
+        return redirect(url_for('dashboard'))
     return render_template("share.html")
 
 @app.route('/details')
