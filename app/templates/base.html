@@ -11,7 +11,17 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/BookTracker.png') }}">
 </head>
-
+<nav>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-info" role="alert">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+</nav>
 {% block body %}
 {% endblock %}
 
