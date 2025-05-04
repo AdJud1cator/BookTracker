@@ -16,7 +16,24 @@
     &larr; Back
   </a>
 
+  <table>
+    <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Genre</th>
+        <th>Description</th>
+    </tr>
+    {% for book in books %}
+    <tr>
+        <td>{{ book.title }}</td>
+        <td>{{ book.author }}</td>
+        <td>{{ book.genre }}</td>
+        <td>{{ book.description }}</td>
+    </tr>
+    {% endfor %}
+  </table>
 
+  <!-- 
   <div class="overflow-x-auto">
     <table class="min-w-full divide-y divide-gray-200">
       <thead class="bg-gray-50">
@@ -67,6 +84,7 @@
       </tbody>
     </table>
   </div>
+   -->
 </body>
 
 {% endblock %}
