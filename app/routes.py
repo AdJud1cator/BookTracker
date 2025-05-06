@@ -2,6 +2,26 @@ from flask import redirect, render_template, request, url_for
 from app import app
 
 @app.route('/', methods=['GET', 'POST'])
+def landing():
+    return render_template("Landing.html")
+
+@app.route('/privacy')
+def privacy():
+    return render_template("Privacy.html")
+
+@app.route('/terms')
+def terms():
+    return render_template("Terms.html")
+
+@app.route('/faq')
+def faq():
+    return render_template("FAQ.html")
+
+@app.route('/forgot-password', methods=['GET', 'POST'])
+def forgot_password():
+    return render_template("forgot.html")
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == "POST":
         return redirect(url_for('dashboard'))
