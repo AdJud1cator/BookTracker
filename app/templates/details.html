@@ -128,7 +128,7 @@
   <script src="{{ url_for('static', filename='js/dark.js') }}"></script>
   <script>
     const googleid = "{{ googleid }}";
-    let bookTitle = "", bookAuthors = "", bookCover = "", bookDesc = "", bookGenre = "";
+    let bookTitle = "", bookAuthors = "", bookCover = "", bookDesc = "", bookGenre = "", pageCount = null;
 
     async function fetchBookDetails() {
       const url = `https://www.googleapis.com/books/v1/volumes/${googleid}`;
@@ -142,7 +142,8 @@
       bookAuthors = (info.authors && info.authors.join(', ')) || 'Unknown Author';
       bookCover = (info.imageLinks && info.imageLinks.thumbnail) || 'https://via.placeholder.com/150x220?text=No+Cover';
       bookDesc = info.description || '';
-      bookGenre = (info.categories && info.categories.length > 0) ? info.categories[0] : '';
+      bookGenre = (info.categories && info.categories.length > 0) ? info.categories[0].split('/')[0].trim(): '';
+      pageCount = info.pageCount || null;
 
       document.getElementById('bookCover').src = bookCover;
       document.getElementById('bookTitle').textContent = bookTitle;
@@ -170,6 +171,7 @@
           description: bookDesc,
           cover_url: bookCover,
           genre: bookGenre,
+          page_count: pageCount,
           status: status
         })
       })

@@ -134,6 +134,7 @@ def add_book():
     cover_url = data.get('cover_url')
     status = data.get('status')
     genre = data.get('genre')
+    page_count = data.get('page_count')
 
     # Create or get book
     book = Book.query.filter_by(google_id=google_id).first()
@@ -144,7 +145,8 @@ def add_book():
             author=author,
             description=description,
             cover_url=cover_url,
-            genre=genre
+            genre=genre,
+            page_count=page_count
         )
         db.session.add(book)
         db.session.commit()
@@ -325,7 +327,7 @@ def stats_authors():
 def stats_avg_pages_by_genre():
     # You must have a page_count field in Book model for this to work!
     results = (
-        db.session.query(Book.genre, func.avg(Book.description))  # Change to Book.page_count if you have it!
+        db.session.query(Book.genre, func.avg(Book.page_count))  # Change to Book.page_count if you have it!
         .join(UserBook, Book.id == UserBook.book_id)
         .filter(UserBook.user_id == current_user.id)
         .group_by(Book.genre)
