@@ -88,12 +88,8 @@
       </div>
     </div>
     <hr>
-    <div class="mb-3">
-      <h5>Description</h5>
-      <div id="bookDescription" style="white-space: pre-line;"></div>
-    </div>
     <div class="mb-4">
-      <h5>Add to your list</h5>
+      <h5>Add to your Library</h5>
       <div class="status-btn-group btn-group" role="group" aria-label="Reading status">
         <button type="button" class="btn btn-outline-primary" onclick="setStatus('currently_reading')">Currently
           Reading</button>
@@ -102,6 +98,11 @@
       </div>
       <div id="statusMessage" class="mt-3"></div>
     </div>
+    <div class="mb-3">
+      <h5>Description</h5>
+      <div id="bookDescription" style="white-space: pre-line;"></div>
+    </div>
+    
     <a id="previewLink" href="#" target="_blank" class="btn btn-link">Preview on Google Books</a>
   </div>
 
@@ -142,16 +143,16 @@
       bookAuthors = (info.authors && info.authors.join(', ')) || 'Unknown Author';
       bookCover = (info.imageLinks && info.imageLinks.thumbnail) || 'https://via.placeholder.com/150x220?text=No+Cover';
       bookDesc = info.description || '';
-      bookGenre = (info.categories && info.categories.length > 0) ? info.categories[0].split('/')[0].trim(): '';
+      bookGenre = (info.categories && info.categories.length > 0) ? info.categories[0].split('/')[0].trim(): 'Uncategorised';
       pageCount = info.pageCount || null;
 
       document.getElementById('bookCover').src = bookCover;
       document.getElementById('bookTitle').textContent = bookTitle;
       document.getElementById('bookAuthors').textContent = bookAuthors;
-      document.getElementById('bookPublisher').textContent = info.publisher || 'Unknown';
-      document.getElementById('bookPublished').textContent = info.publishedDate || 'Unknown';
+      document.getElementById('bookPublisher').textContent = info.publisher || 'Unknown Publisher';
+      document.getElementById('bookPublished').textContent = info.publishedDate || 'Unknown Date';
       document.getElementById('bookPages').textContent = info.pageCount || 'Unknown';
-      document.getElementById('bookCategories').textContent = (info.categories && info.categories.join(', ')) || '-';
+      document.getElementById('bookCategories').textContent = bookGenre;
       let isbn = '-';
       if (info.industryIdentifiers && info.industryIdentifiers.length) {
         isbn = info.industryIdentifiers.map(i => i.identifier).join(', ');
