@@ -222,18 +222,18 @@
                         const col = document.createElement('div');
                         col.className = 'col-sm-6 col-md-4 col-lg-3 mb-4 d-flex';
                         col.innerHTML = `
-                            <div class="book-card flex-fill d-flex flex-column">
+                            <div class="book-card flex-fill d-flex flex-column clickable-card" role="button" tabindex="0">
                                 <img src="${img}" alt="Book cover">
                                 <div class="book-title" title="${info.title || ''}">${title}</div>
                                 <div class="book-author">${authors}</div>
                                 <div class="book-desc">${desc}</div>
-                                <button class="btn btn-outline-primary btn-sm mt-2 details-btn" type="button">Details</button>
                             </div>
                         `;
-                        col.querySelector('.details-btn').addEventListener('click', function() {
+                        col.querySelector('.clickable-card').addEventListener('click', function() {
                             const modal = new bootstrap.Modal(document.getElementById('loginPromptModal'));
                             modal.show();
                         });
+
                         grid.appendChild(col);
                     });
                 }
