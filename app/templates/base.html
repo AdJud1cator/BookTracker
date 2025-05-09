@@ -8,57 +8,11 @@
     {% block head %}
     {% endblock %}
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/BookTracker.png') }}">
-
-    <!-- Add Font Awesome CDN for Icons -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script> -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-
 </head>
 
-<body>
-    {% block body %}
-    {% endblock %}
-
-<!-- Footer -->
-<footer class="bg-dark text-white py-4">
-    <div class="container text-center">
-
-        <!-- First Line: Links + Dark Mode -->
-        <div class="mb-3 d-flex flex-wrap justify-content-center align-items-center gap-3">
-            <a href="{{ url_for('terms') }}" class="text-white text-decoration-none">Terms</a>
-            <a href="{{ url_for('privacy') }}" class="text-white text-decoration-none">Privacy</a>
-            <a href="#" class="text-white text-decoration-none">Team</a>
-            <button id="footerDarkModeToggle" class="btn btn-outline-light btn-sm">Dark Mode</button>
-        </div>
-
-        <!-- Second Line: Social Media Icons -->
-        <div class="mb-3">
-            <a href="https://www.facebook.com" target="_blank" class="text-white mx-2">
-                <i class="fab fa-facebook-f fa-lg"></i>
-            </a>
-            <a href="https://x.com" target="_blank" class="text-white mx-2" aria-label="X (formerly Twitter)">
-                <i class="fab fa-x-twitter fa-lg"></i>
-            </a>
-            <a href="https://www.instagram.com" target="_blank" class="text-white mx-2">
-                <i class="fab fa-instagram fa-lg"></i>
-            </a>
-        </div>
-
-        <!-- Third Line: Copyright -->
-        <div>
-            <small>&copy; 2025 BookTracker</small>
-        </div>
-        
-    </div>
-</footer>
-
-
-    <!-- Bootstrap JavaScript Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+{% block body %}
+{% endblock %}
 
 </html>
