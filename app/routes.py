@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for, flash, jsonify
-from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask_login import login_user, logout_user, login_required, current_user
 from .models import User, UserBook, Book, BookShare
-from . import db, login_manager
+from . import db
 from app import app
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import desc, func
