@@ -27,7 +27,7 @@ class UserBook(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)
     status = db.Column(db.String(30), nullable=False)  # 'currently_reading', 'completed', 'wishlist'
-    date_added = db.Column(db.DateTime, server_default=db.func.now())
+    date_added = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
     date_completed = db.Column(db.DateTime, nullable=True)  # For statistics
 
     user = db.relationship('User', back_populates='books')
