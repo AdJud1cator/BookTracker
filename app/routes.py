@@ -1,20 +1,12 @@
 from flask import render_template, request, redirect, url_for, flash, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from .models import User, UserBook, Book, BookShare
-from . import db
+from . import db, login_manager
 from app import app
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import desc, func
 import calendar
 from collections import defaultdict
-
-# Flask-Login setup
-login_manager = LoginManager(app)
-login_manager.login_view = 'login'
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
 
 # ----------------- Registration -----------------
 @app.route('/register', methods=['GET', 'POST'])
