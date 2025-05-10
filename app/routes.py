@@ -7,6 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import desc, func
 import calendar
 from collections import defaultdict
+from datetime import datetime, timezone
 
 # ----------------- Registration -----------------
 @app.route('/register', methods=['GET', 'POST'])
@@ -148,8 +149,18 @@ def add_book():
     message = "Book status updated in your library!" if userbook else "Book added to your library!"
     if userbook:
         userbook.status = status
+        if status == "completed":
+            userbook.date_completed = datetime.now(timezone.utc)
+        else:
+            userbook.date_completed = None
     else:
-        db.session.add(UserBook(user_id=current_user.id, book_id=book.id, status=status))
+        date_completed = datetime.now() if status == "completed" else None
+        db.session.add(UserBook(
+            user_id=current_user.id,
+            book_id=book.id,
+            status=status,
+            date_completed=date_completed
+        ))
     db.session.commit()
     return jsonify({"success": True, "message": message})
 
