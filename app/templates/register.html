@@ -23,7 +23,7 @@
                 <p class="text-muted mb-0">Start your reading journey today!</p>
             </div>
 
-            <form method="post" action="{{ url_for('register') }}">
+            <form method="post" action="{{ url_for('main.register') }}">
                 <div class="mb-3">
                     <label for="email" class="form-label fw-semibold">Email address</label>
                     <input type="email" class="form-control form-control-lg" id="email" name="email"
@@ -48,7 +48,7 @@
                     <input class="form-check-input" type="checkbox" value="agree" id="terms" name="terms" required>
                     <label class="form-check-label" for="terms">
                         I agree to the
-                        <a href="{{ url_for('terms') }}" target="_blank"
+                        <a href="{{ url_for('main.terms') }}" target="_blank"
                             class="text-primary text-decoration-underline">Terms &amp; Conditions</a>
                     </label>
                 </div>
@@ -59,7 +59,7 @@
 
             <div class="text-center mt-3">
                 <span class="text-muted">Already have an account?</span>
-                <a href="{{ url_for('login') }}" class="text-primary fw-semibold ms-1">Sign In</a>
+                <a href="{{ url_for('main.login') }}" class="text-primary fw-semibold ms-1">Sign In</a>
             </div>
         </div>
         <!-- Footer -->
@@ -72,12 +72,12 @@
             <div class="mb-2">
                 <a href="#" id="darkModeToggleLink" class="text-decoration-none text-primary mx-2"><span
                         id="darkModeStatus">Dark Mode</span></a> ·
-                <a href="{{ url_for('contact') }}" class="text-decoration-none text-primary mx-2">Contact</a>
+                <a href="{{ url_for('main.contact') }}" class="text-decoration-none text-primary mx-2">Contact</a>
             </div>
             <div>
-                <a href="{{ url_for('terms') }}" class="text-decoration-none text-primary mx-2">Terms & Conditions</a> ·
-                <a href="{{ url_for('policy') }}" class="text-decoration-none text-primary mx-2">Privacy Policy</a> ·
-                <a href="{{ url_for('copyright') }}" class="text-decoration-none text-primary mx-2">Copyright</a>
+                <a href="{{ url_for('main.terms') }}" class="text-decoration-none text-primary mx-2">Terms & Conditions</a> ·
+                <a href="{{ url_for('main.policy') }}" class="text-decoration-none text-primary mx-2">Privacy Policy</a> ·
+                <a href="{{ url_for('main.copyright') }}" class="text-decoration-none text-primary mx-2">Copyright</a>
             </div>
         </footer>
     </div>
@@ -100,11 +100,11 @@
             timer: 2000,
             showConfirmButton: false
         }).then(() => {
-            window.location.href = "{{ url_for('login') }}";
+            window.location.href = "{{ url_for('main.login') }}";
         });
         // Also auto-redirect in case user doesn't click
         setTimeout(function () {
-            window.location.href = "{{ url_for('login') }}";
+            window.location.href = "{{ url_for('main.login') }}";
         }, 2000);
     </script>
     {% endif %}

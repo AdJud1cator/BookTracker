@@ -69,15 +69,15 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="{{ url_for('homepage') }}">BookTracker</a>
+            <a class="navbar-brand fw-bold" href="{{ url_for('main.homepage') }}">BookTracker</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <div class="navbar-nav">
-                    <a class="nav-link" href="{{ url_for('login') }}">Sign In</a>
-                    <a class="nav-link" href="{{ url_for('register') }}">Sign Up</a>
+                    <a class="nav-link" href="{{ url_for('main.login') }}">Sign In</a>
+                    <a class="nav-link" href="{{ url_for('main.register') }}">Sign Up</a>
                 </div>
             </div>
         </div>
@@ -117,8 +117,8 @@
                         You need to sign in to view book details and add books to your library.
                     </div>
                     <div class="modal-footer">
-                        <a href="{{ url_for('login') }}" class="btn btn-primary">Sign In</a>
-                        <a href="{{ url_for('register') }}" class="btn btn-outline-primary">Sign Up</a>
+                        <a href="{{ url_for('main.login') }}" class="btn btn-primary">Sign In</a>
+                        <a href="{{ url_for('main.register') }}" class="btn btn-outline-primary">Sign Up</a>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </div>
@@ -131,8 +131,8 @@
         <div class="sign-invitation text-center my-5 p-4 rounded bg-light bg-opacity-25">
             <p class="fs-5 mb-4">Ready to start your reading journey?</p>
             <div class="d-flex justify-content-center gap-3 flex-wrap">
-                <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg px-4">Sign Up</a>
-                <a href="{{ url_for('register') }}" class="btn btn-outline-primary btn-lg px-4">Sign In</a>
+                <a href="{{ url_for('main.login') }}" class="btn btn-primary btn-lg px-4">Sign Up</a>
+                <a href="{{ url_for('main.register') }}" class="btn btn-outline-primary btn-lg px-4">Sign In</a>
             </div>
         </div>
 
@@ -180,12 +180,12 @@
         <div class="mb-2">
             <a href="#" id="darkModeToggleLink" class="text-decoration-none text-primary mx-2"><span
                     id="darkModeStatus">Dark Mode</span></a> ·
-            <a href="{{ url_for('contact') }}" class="text-decoration-none text-primary mx-2">Contact</a>
+            <a href="{{ url_for('main.contact') }}" class="text-decoration-none text-primary mx-2">Contact</a>
         </div>
         <div>
-            <a href="{{ url_for('terms') }}" class="text-decoration-none text-primary mx-2">Terms & Conditions</a> ·
-            <a href="{{ url_for('policy') }}" class="text-decoration-none text-primary mx-2">Privacy Policy</a> ·
-            <a href="{{ url_for('copyright') }}" class="text-decoration-none text-primary mx-2">Copyright</a>
+            <a href="{{ url_for('main.terms') }}" class="text-decoration-none text-primary mx-2">Terms & Conditions</a> ·
+            <a href="{{ url_for('main.policy') }}" class="text-decoration-none text-primary mx-2">Privacy Policy</a> ·
+            <a href="{{ url_for('main.copyright') }}" class="text-decoration-none text-primary mx-2">Copyright</a>
         </div>
     </footer>
 
