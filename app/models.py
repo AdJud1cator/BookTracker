@@ -19,6 +19,7 @@ class Book(db.Model):
     description = db.Column(db.Text, nullable=True)
     cover_url = db.Column(db.String(300), nullable=True)
     page_count = db.Column(db.Integer, nullable=True)
+    #rating = db.Column(db.Float, nullable=True)
     userbooks = db.relationship('UserBook', back_populates='book', cascade='all, delete-orphan')
     shares = db.relationship('BookShare', back_populates='book', cascade='all, delete-orphan')
 
