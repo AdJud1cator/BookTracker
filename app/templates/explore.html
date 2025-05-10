@@ -84,6 +84,15 @@
             color: #555;
             text-align: center;
         }
+
+        [data-bs-theme="dark"] .book-card {
+            background: #2b3038;
+        }
+
+        
+        [data-bs-theme="dark"] .book-desc {
+            color: #fff;
+        }
     </style>
 </head>
 <body class="bg-body">
@@ -108,7 +117,7 @@
         </div>
     </nav>
 
-    <div class="container my-5 p-4 rounded shadow-sm bg-body">
+    <div class="container my-5 p-4 rounded shadow-sm bg-body main-container">
         <h2 class="fw-semibold text-primary mb-4">Explore Books</h2>
         <form class="search-bar" id="searchForm" autocomplete="off">
             <input type="text" id="searchInput" placeholder="Search for books by title, author, or keyword..." autocomplete="off">

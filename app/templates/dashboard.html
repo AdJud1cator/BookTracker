@@ -15,6 +15,7 @@
             justify-content: center;
             margin-top: 4rem;
         }
+        
 
         .dashboard-card {
             flex: 1 1 220px;
@@ -29,6 +30,20 @@
             cursor: pointer;
             border: 2px solid transparent;
         }
+
+        [data-bs-theme="dark"] .dashboard-card {
+            background: #2b3038;
+        }
+
+        [data-bs-theme="dark"] .dashboard-card .title {
+            color: #fff;
+        }
+
+        [data-bs-theme="dark"] .dashboard-card .desc {
+            color: #fff;
+        }
+
+
 
         .dashboard-card:hover {
             transform: translateY(-6px) scale(1.04);
