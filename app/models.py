@@ -1,6 +1,13 @@
 from . import db
 from flask_login import UserMixin
 
+# When you make any changes to the models.py file eg. adding a column to one of the models please open up a terminal in administrator then:
+# cd path/to/booktracker
+# flask db migrate -m "Describe the change"
+# flask db upgrade
+# This applies the schema changes to your app.db database
+
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
@@ -19,6 +26,7 @@ class Book(db.Model):
     description = db.Column(db.Text, nullable=True)
     cover_url = db.Column(db.String(300), nullable=True)
     page_count = db.Column(db.Integer, nullable=True)
+    #rating = db.Column(db.Float, nullable=True)
     userbooks = db.relationship('UserBook', back_populates='book', cascade='all, delete-orphan')
     shares = db.relationship('BookShare', back_populates='book', cascade='all, delete-orphan')
 
