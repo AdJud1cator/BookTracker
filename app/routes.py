@@ -47,7 +47,7 @@ def login():
 def logout():
     logout_user()
     flash('You have been logged out.', 'info')
-    return redirect(url_for('login'))
+    return redirect(url_for('homepage'))
 
 # ----------------- Static Pages -----------------
 @app.route('/')

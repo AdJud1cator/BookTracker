@@ -162,15 +162,17 @@
                 const authors = (info.authors && info.authors.join(', ')) || 'Unknown Author';
                 const desc = info.description ? info.description.substring(0, 80) + (info.description.length > 80 ? '…' : '') : '';
                 const detailsUrl = `/details?googleid=${book.id}`;
-                const card = document.createElement('div');
+                const card = document.createElement('a');
                 card.className = 'book-card';
+                card.href = detailsUrl;
+                card.style.textDecoration = 'none'; // Optional: removes underline from link
                 card.innerHTML = `
                     <img src="${img}" alt="Book cover">
                     <div class="book-title" title="${info.title || ''}">${title}</div>
                     <div class="book-author">${authors}</div>
                     <div class="book-desc">${desc}</div>
-                    <a href="${detailsUrl}" class="btn btn-outline-primary btn-sm mt-2">Details</a>
                 `;
+
                 grid.appendChild(card);
             });
         }
