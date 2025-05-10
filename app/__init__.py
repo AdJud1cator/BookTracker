@@ -11,7 +11,6 @@ login_manager = LoginManager()
 def create_app():
     global app
     app = Flask(__name__)
-    app.secret_key = 'secret_key' # A temporary measure to apply authentication, needs to be changed
     app.config.from_object(Config)
 
     db.init_app(app)
