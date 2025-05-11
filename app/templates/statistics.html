@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en" data-bs-theme="light">
-<head>
-    <meta charset="UTF-8" />
-    <title>Statistics - BookTracker</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../static/css/styles.css" />
+{% extends "base_member.html" %}
+
+{% block title %}Statistics - BookTracker{% endblock %}
+
+{% block head %}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .stats-container { max-width: 1100px; margin: 2rem auto; }
@@ -14,83 +11,46 @@
         @media (max-width: 900px) {
             .chart-card { padding: 1rem; }
         }
-        [data-bs-theme="dark"] .chart-card { background: #2b3038; color: #f8f9fa; }
+        [data-bs-theme="dark"] .chart-card { background: #232137; color: #f8f9fa; }
     </style>
-</head>
-<body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="{{ url_for('dashboard') }}">BookTracker</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <div class="navbar-nav">
-                    <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
-                    <a class="nav-link" href="{{ url_for('explore') }}">Explore</a>
-                    <a class="nav-link" href="{{ url_for('library') }}">Library</a>
-                    <a class="nav-link" href="{{ url_for('community') }}">Community</a>
-                    <a class="nav-link active fw-semibold" aria-current="page" href="{{ url_for('statistics') }}">Statistics</a>
-                    <a class="nav-link" href="{{ url_for('logout') }}">Sign Out</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-    <div class="stats-container">
-        <div class="chart-card">
-            <div class="chart-title">Books by Genre (Top 10)</div>
-            <canvas id="genrePie"></canvas>
-        </div>
-        <div class="chart-card">
-            <div class="chart-title">Books Read Over Time</div>
-            <div class="mb-3">
-                <select id="timeRange" class="form-select" style="max-width:200px;">
-                    <option value="weeks">By Week</option>
-                    <option value="months" selected>By Month</option>
-                    <option value="years">By Year</option>
-                    <option value="all">All Time</option>
-                </select>
-            </div>
-            <canvas id="booksOverTime"></canvas>
-        </div>
-        <div class="chart-card">
-            <div class="chart-title">Book Status Distribution</div>
-            <canvas id="statusPie"></canvas>
-        </div>
-        <div class="chart-card">
-            <div class="chart-title">Top Authors</div>
-            <canvas id="authorBar"></canvas>
-        </div>
-        <div class="chart-card">
-            <div class="chart-title">Average Book Length by Genre</div>
-            <canvas id="avgPagesBar"></canvas>
-        </div>
+{% endblock %}
+
+{% block content %}
+<div class="stats-container px-4">
+    <div class="chart-card">
+        <div class="chart-title">Books by Genre (Top 10)</div>
+        <canvas id="genrePie"></canvas>
     </div>
-    <!-- Footer (same as other pages) -->
-    <footer class="text-center text-muted mt-5 mb-3 small">
-        <div class="mb-2">
-            <a href="https://www.facebook.com/" class="text-decoration-none text-primary mx-2">Facebook</a> ·
-            <a href="https://www.x.com/" class="text-decoration-none text-primary mx-2">Twitter</a> ·
-            <a href="https://www.instagram.com/" class="text-decoration-none text-primary mx-2">Instagram</a>
+    <div class="chart-card">
+        <div class="chart-title">Books Read Over Time</div>
+        <div class="mb-3">
+            <select id="timeRange" class="form-select" style="max-width:200px;">
+                <option value="weeks">By Week</option>
+                <option value="months" selected>By Month</option>
+                <option value="years">By Year</option>
+                <option value="all">All Time</option>
+            </select>
         </div>
-        <div class="mb-2">
-            <a href="#" id="darkModeToggleLink" class="text-decoration-none text-primary mx-2">
-                <span id="darkModeStatus">Dark Mode</span>
-            </a> ·
-            <a href="{{ url_for('contact') }}" class="text-decoration-none text-primary mx-2">Contact</a>
-        </div>
-        <div>
-            <a href="{{ url_for('terms') }}" class="text-decoration-none text-primary mx-2">Terms & Conditions</a> ·
-            <a href="{{ url_for('policy') }}" class="text-decoration-none text-primary mx-2">Privacy Policy</a> ·
-            <a href="{{ url_for('copyright') }}" class="text-decoration-none text-primary mx-2">Copyright</a>
-        </div>
-    </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ url_for('static', filename='js/dark.js') }}"></script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
+        <canvas id="booksOverTime"></canvas>
+    </div>
+    <div class="chart-card">
+        <div class="chart-title">Book Status Distribution</div>
+        <canvas id="statusPie"></canvas>
+    </div>
+    <div class="chart-card">
+        <div class="chart-title">Top Authors</div>
+        <canvas id="authorBar"></canvas>
+    </div>
+    <div class="chart-card">
+        <div class="chart-title">Average Book Length by Genre</div>
+        <canvas id="avgPagesBar"></canvas>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
     // --- Genre Pie Chart ---
     fetch('/stats/genres')
       .then(res => res.json())
@@ -191,15 +151,13 @@
     fetch('/stats/authors')
       .then(res => res.json())
       .then(authorData => {
-        const authorLabels = Object.keys(authorData);
-        const authorCounts = Object.values(authorData);
         new Chart(document.getElementById('authorBar'), {
             type: 'bar',
             data: {
-                labels: authorLabels,
+                labels: Object.keys(authorData),
                 datasets: [{
                     label: "Books Read",
-                    data: authorCounts,
+                    data: Object.values(authorData),
                     backgroundColor: "#0d6efd"
                 }]
             },
@@ -216,15 +174,13 @@
     fetch('/stats/avg_pages_by_genre')
       .then(res => res.json())
       .then(avgPagesData => {
-        const avgPagesLabels = Object.keys(avgPagesData);
-        const avgPagesCounts = Object.values(avgPagesData);
         new Chart(document.getElementById('avgPagesBar'), {
             type: 'bar',
             data: {
-                labels: avgPagesLabels,
+                labels: Object.keys(avgPagesData),
                 datasets: [{
                     label: "Average Pages",
-                    data: avgPagesCounts,
+                    data: Object.values(avgPagesData),
                     backgroundColor: "#20c997"
                 }]
             },
@@ -236,6 +192,5 @@
         });
       });
 });
-    </script>
-</body>
-</html>
+</script>
+{% endblock %}
