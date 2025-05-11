@@ -49,9 +49,16 @@
 
 {% block content %}
 
-<div class="container p-4">
-  <div class="book-details-container shadow-sm bg-body">
-  <div class="d-flex book-details-flex">
+<div class="book-details-container shadow-sm bg-body position-relative">
+  <!-- Close Button in top left -->
+  <a href="{{ request.referrer or url_for('main.homepage') }}" 
+     class="btn-close position-absolute" 
+     style="top: 1rem; right: 1rem;" 
+     aria-label="Close" title="Back"></a>
+
+  <!-- Main content starts below the X button -->
+  <div class="d-flex book-details-flex mt-5 pt-2">
+
     <img id="bookCover" class="book-cover" src="" alt="Book cover">
     <div class="book-meta">
       <h2 id="bookTitle" class="fw-semibold text-primary"></h2>
@@ -60,6 +67,13 @@
       <div class="mb-2"><strong>Published:</strong> <span id="bookPublished"></span></div>
       <div class="mb-2"><strong>Page Count:</strong> <span id="bookPages"></span></div>
       <div class="mb-2"><strong>Categories:</strong> <span id="bookCategories"></span></div>
+
+      <div class="mb-2">
+        <strong>Rating:</strong>
+        <span id="bookRating"></span>
+        <small id="ratingsCount" class="text-muted"></small>
+      </div>
+      
       <div class="mb-2"><strong>ISBN:</strong> <span id="bookISBN"></span></div>
     </div>
   </div>
@@ -79,7 +93,6 @@
   </div>
   
   <a id="previewLink" href="#" target="_blank" class="btn btn-link">Preview on Google Books</a>
-</div>
 </div>
 {% endblock %}
 
