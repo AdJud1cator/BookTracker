@@ -1,284 +1,270 @@
-{% extends 'base_anon.html' %}
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
 
-{% block title %}BookTracker - Your Reading Journey{% endblock %}
+<head>
+    <meta charset="UTF-8" />
+    <title>BookTracker - Your Reading Journey</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-{% block head %}
-<style>
-    .book-card {
-        background: #fff;
-        border-radius: 0.5rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-        padding: 1rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-height: 320px;
-        transition: transform 0.15s;
-        height: 100%;
-    }
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous" />
 
-    .book-card:hover {
-        transform: translateY(-4px) scale(1.03);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.13);
-    }
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="../static/css/styles.css" />
 
-    .book-card img {
-        width: 110px;
-        height: 160px;
-        object-fit: cover;
-        border-radius: 0.25rem;
-        margin-bottom: 0.75rem;
-    }
-
-    .book-title {
-        font-weight: 600;
-        font-size: 1.05rem;
-        margin-bottom: 0.25rem;
-        text-align: center;
-        max-width: 180px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .book-author {
-        font-size: 0.96rem;
-        color: #0d6efd;
-        margin-bottom: 0.5rem;
-        text-align: center;
-    }
-
-    .book-desc {
-        font-size: 0.92rem;
-        color: #555;
-        text-align: center;
-    }
-
-    [data-bs-theme="dark"] .book-card {
-        background: #232137;
-        color: #f8f9fa;
-    }
-
-    [data-bs-theme="dark"] .book-card img {
-        background: #1a1a2a;
-    }
-</style>
-{% endblock %}
-
-{% block content %}
-<!-- Hero Section -->
-<div class="position-relative" style="height: 75vh;">
-    <div class="position-absolute top-0 start-0 w-100 h-100"
-        style="background-image: url('{{ url_for("static", filename="img/Back_Landing.png") }}'); background-size: cover; background-position: center;">
-        <div class="position-absolute top-0 start-0 w-100 h-100 bg-black opacity-75"></div>
-    </div>
-    <div class="container position-relative d-flex flex-column justify-content-center align-items-center text-center h-100 z-1">
-        <h1 class="display-4 fw-bold text-white">Welcome to BookTracker</h1>
-        <p class="fs-5 fst-italic text-white">"Where every book tells two stories—yours and its own."</p>
-        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg mt-3">Get Started</a>
-    </div>
-</div>
-
-    <!-- Search Box -->
-    <div class="py-4 search-box text-center mb-5">
-        <h3 class=" fw-semibold mb-3">Find your next great read</h3>
-        <form id="searchForm" class="d-flex justify-content-center flex-column flex-sm-row" role="search"
-            style="max-width: 600px; margin: 0 auto;">
-            <input class="form-control form-control-lg rounded-start mb-3 mb-sm-0" type="search" id="searchInput"
-                placeholder="Search by title, author, or ISBN..." aria-label="Search" autocomplete="off" required />
-            <button class="btn btn-primary btn-lg rounded-end ms-sm-2" type="submit">Search</button>
-        </form>
-        <div id="resultsTitle" class="mt-4 mb-2"></div>
-        <div class="container">
-        <div class="row justify-content-center" id="booksGrid"></div>
-        </div>
-    </div>
-
-    <!-- Login Modal -->
-    <div class="modal fade" id="loginPromptModal" tabindex="-1" aria-labelledby="loginPromptModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="loginPromptModalLabel">Sign In Required</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    You need to sign in to view book details and add books to your library.
-                </div>
-                <div class="modal-footer">
-                    <a href="{{ url_for('login') }}" class="btn btn-primary">Sign In</a>
-                    <a href="{{ url_for('register') }}" class="btn btn-outline-primary">Sign Up</a>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Feature List Section -->
-    <div class="py-5 text-center">
-        <h2 class="fw-bold mb-4 ">Features</h2>
-        <div class="container">
-            <div class="row g-4">
-                <!-- Feature 1 -->
-                <div class="col-md-3">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body text-center">
-                            <img src="{{ url_for('static', filename='img/Track_reading.png') }}" alt="Track Books"
-                                class="mb-3" style="height: 40px;">
-                            <h5 class="card-title">Track Your Reading</h5>
-                            <p class="card-text">Track books you've read and want to read easily in one place.</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Feature 2 -->
-                <div class="col-md-3">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body text-center">
-                            <img src="{{ url_for('static', filename='img/Digital_Book.png') }}" alt="Discover Books"
-                                class="mb-3" style="height: 40px;">
-                            <h5 class="card-title">Book Discovery</h5>
-                            <p class="card-text">Discover new books tailored to your reading preferences.</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Feature 3 -->
-                <div class="col-md-3">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body text-center">
-                            <img src="{{ url_for('static', filename='img/Sharing.png') }}" alt="Community Sharing"
-                                class="mb-3" style="height: 40px;">
-                            <h5 class="card-title">Connect & Share</h5>
-                            <p class="card-text">Connect with fellow readers and share book recommendations.</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Feature 4 -->
-                <div class="col-md-3">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body text-center">
-                            <img src="{{ url_for('static', filename='img/Stats.png') }}" alt="Reading Insights"
-                                class="mb-3" style="height: 40px;">
-                            <h5 class="card-title">Reading Insights</h5>
-                            <p class="card-text">Get personalized reading statistics and performance insights.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-<!-- FAQ Section -->
-<section class="py-5">
-    <div class="container">
-        <h2 class="text-center mb-4">Frequently Asked Questions</h2>
-        <div class="accordion" id="faqAccordion">
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingOne">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        Is BookTracker free to use?
-                    </button>
-                </h2>
-                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
-                    data-bs-parent="#faqAccordion">
-                    <div class="accordion-body">
-                        Yes, BookTracker is completely free and always will be!
-                    </div>
-                </div>
-            </div>
-
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingTwo">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        Can I use BookTracker without creating an account?
-                    </button>
-                </h2>
-                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-                    data-bs-parent="#faqAccordion">
-                    <div class="accordion-body">
-                        You can browse and search books, but to save and track your own, you’ll need an account.
-                    </div>
-                </div>
-            </div>
-
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingThree">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        Where do book details come from?
-                    </button>
-                </h2>
-                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
-                    data-bs-parent="#faqAccordion">
-                    <div class="accordion-body">
-                        BookTracker uses the Open Library API to fetch book information in real time.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-{% endblock %}
-
-{% block scripts %}
-    <script>
-        // --- Search Functionality ---
-        async function fetchBooks(query, maxResults = 20, orderBy = 'relevance') {
-            const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=${maxResults}&orderBy=${orderBy}`;
-            const resp = await fetch(url);
-            const data = await resp.json();
-            return (data.items || []);
+    <style>
+        .book-card {
+            background: #fff;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 320px;
+            transition: transform 0.15s;
+            height: 100%;
         }
-        function truncateTitle(title, maxLength = 50) {
-            return title.length > maxLength ? title.substring(0, maxLength - 1) + '…' : title;
+        .book-card:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.13);
         }
-        function renderBooks(books) {
-            const grid = document.getElementById('booksGrid');
-            grid.innerHTML = '';
-            if (books.length === 0) {
-                grid.innerHTML = '<p style="text-align:center; color:#888; width:100%;">No books found.</p>';
-                return;
-            }
-            books.forEach(book => {
-                const info = book.volumeInfo || {};
-                const img = (info.imageLinks && info.imageLinks.thumbnail) || 'https://via.placeholder.com/110x160?text=No+Cover';
-                const title = info.title ? truncateTitle(info.title) : 'No Title';
-                const authors = (info.authors && info.authors.join(', ')) || 'Unknown Author';
-                const desc = info.description ? info.description.substring(0, 80) + (info.description.length > 80 ? '…' : '') : '';
-                const col = document.createElement('div');
-                col.className = 'col-sm-6 col-md-4 col-lg-3 mb-4 d-flex';
-                col.innerHTML = `
-                            <div class="book-card flex-fill d-flex flex-column">
+        .book-card img {
+            width: 110px;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 0.25rem;
+            margin-bottom: 0.75rem;
+        }
+        .book-title {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 0.25rem;
+            text-align: center;
+            max-width: 180px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .book-author {
+            font-size: 0.96rem;
+            color: #0d6efd;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        .book-desc {
+            font-size: 0.92rem;
+            color: #555;
+            text-align: center;
+        }
+
+
+        .sign-invitation {
+            background-color: rgba(248, 249, 250, 0.25);
+        }
+
+        [data-bs-theme="dark"] .sign-invitation {
+            background-color: #212529 !important;
+            color: #f8f9fa;
+        }
+
+        [data-bs-theme="dark"] .book-card { background: #232137; color: #f8f9fa; }
+        [data-bs-theme="dark"] .book-card img { background: #1a1a2a; }
+        </style>
+        
+
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{{ url_for('main.homepage') }}">BookTracker</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <div class="navbar-nav">
+                    <a class="nav-link" href="{{ url_for('main.login') }}">Sign In</a>
+                    <a class="nav-link" href="{{ url_for('main.register') }}">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main container -->
+    <div class="container my-5 p-4 rounded shadow-sm bg-body">
+        <!-- Header -->
+        <div class="header text-center mb-5">
+            <h2 class="fw-semibold text-primary">Welcome to BookTracker</h2>
+            <p>Your personal reading journey starts here</p>
+        </div>
+
+        <!-- Search Box -->
+        <div class="search-box text-center mb-5">
+            <h3 class="text-primary fw-semibold mb-3">Find your next great read</h3>
+            <form id="searchForm" class="d-flex justify-content-center flex-column flex-sm-row" role="search"
+                style="max-width: 600px; margin: 0 auto;">
+                <input class="form-control form-control-lg rounded-start mb-3 mb-sm-0" type="search" id="searchInput"
+                    placeholder="Search by title, author, or ISBN..." aria-label="Search" autocomplete="off" required />
+                <button class="btn btn-primary btn-lg rounded-end ms-sm-2" type="submit">Search</button>
+            </form>
+            <div id="resultsTitle" class="mt-4 mb-2"></div>
+            <div class="row justify-content-center" id="booksGrid"></div>
+        </div>
+
+        <!-- Login Modal -->
+        <div class="modal fade" id="loginPromptModal" tabindex="-1" aria-labelledby="loginPromptModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="loginPromptModalLabel">Sign In Required</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        You need to sign in to view book details and add books to your library.
+                    </div>
+                    <div class="modal-footer">
+                        <a href="{{ url_for('main.login') }}" class="btn btn-primary">Sign In</a>
+                        <a href="{{ url_for('main.register') }}" class="btn btn-outline-primary">Sign Up</a>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Sign Invitation -->
+        <div class="sign-invitation text-center my-5 p-4 rounded bg-light bg-opacity-25">
+            <p class="fs-5 mb-4">Ready to start your reading journey?</p>
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                <a href="{{ url_for('main.register') }}" class="btn btn-primary btn-lg px-4">Sign Up</a>
+                <a href="{{ url_for('main.login') }}" class="btn btn-outline-primary btn-lg px-4">Sign In</a>
+            </div>
+        </div>
+
+        <!-- Features -->
+        <div class="features my-5">
+            <h3 class="fw-semibold mb-3 text-primary">Features</h3>
+            <ul class="list-unstyled">
+                <li class="mb-2 d-flex align-items-center">
+                    <span class="me-2 text-primary fw-bold">•</span> Track books you've read and want to read
+                </li>
+                <li class="mb-2 d-flex align-items-center">
+                    <span class="me-2 text-primary fw-bold">•</span> Discover new books based on your preferences
+                </li>
+                <li class="mb-2 d-flex align-items-center">
+                    <span class="me-2 text-primary fw-bold">•</span> Connect with other readers and share
+                    recommendations
+                </li>
+                <li class="mb-2 d-flex align-items-center">
+                    <span class="me-2 text-primary fw-bold">•</span> Get personalized reading statistics and insights
+                </li>
+            </ul>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="faq-section my-5">
+            <h3 class="fw-semibold mb-4 text-primary">Frequently Asked Questions</h3>
+            <div class="faq-item mb-4">
+                <h4>How do I add books to my library?</h4>
+                <p>You can search for books by title, author, or scan a barcode with your device camera.</p>
+            </div>
+            <div class="faq-item">
+                <h4>Is BookTracker free to use?</h4>
+                <p>Yes! BookTracker is completely free with all core features available to everyone.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center text-muted mt-5 mb-3 small">
+        <div class="mb-2">
+            <a href="https://www.facebook.com/" class="text-decoration-none text-primary mx-2">Facebook</a> ·
+            <a href="https://www.x.com/" class="text-decoration-none text-primary mx-2">Twitter</a> ·
+            <a href="https://www.instagram.com/" class="text-decoration-none text-primary mx-2">Instagram</a>
+        </div>
+        <div class="mb-2">
+            <a href="#" id="darkModeToggleLink" class="text-decoration-none text-primary mx-2"><span
+                    id="darkModeStatus">Dark Mode</span></a> ·
+            <a href="{{ url_for('main.contact') }}" class="text-decoration-none text-primary mx-2">Contact</a>
+        </div>
+        <div>
+            <a href="{{ url_for('main.terms') }}" class="text-decoration-none text-primary mx-2">Terms & Conditions</a> ·
+            <a href="{{ url_for('main.policy') }}" class="text-decoration-none text-primary mx-2">Privacy Policy</a> ·
+            <a href="{{ url_for('main.copyright') }}" class="text-decoration-none text-primary mx-2">Copyright</a>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+        crossorigin="anonymous"></script>
+        <script src="{{ url_for('static', filename='js/dark.js') }}"></script>
+
+        <script>
+                // --- Search Functionality ---
+                async function fetchBooks(query, maxResults = 20, orderBy = 'relevance') {
+                    const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=${maxResults}&orderBy=${orderBy}`;
+                    const resp = await fetch(url);
+                    const data = await resp.json();
+                    return (data.items || []);
+                }
+                function truncateTitle(title, maxLength = 50) {
+                    return title.length > maxLength ? title.substring(0, maxLength - 1) + '…' : title;
+                }
+                function renderBooks(books) {
+                    const grid = document.getElementById('booksGrid');
+                    grid.innerHTML = '';
+                    if (books.length === 0) {
+                        grid.innerHTML = '<p style="text-align:center; color:#888; width:100%;">No books found.</p>';
+                        return;
+                    }
+                    books.forEach(book => {
+                        const info = book.volumeInfo || {};
+                        const img = (info.imageLinks && info.imageLinks.thumbnail) || 'https://via.placeholder.com/110x160?text=No+Cover';
+                        const title = info.title ? truncateTitle(info.title) : 'No Title';
+                        const authors = (info.authors && info.authors.join(', ')) || 'Unknown Author';
+                        const desc = info.description ? info.description.substring(0, 80) + (info.description.length > 80 ? '…' : '') : '';
+                        const col = document.createElement('div');
+                        col.className = 'col-sm-6 col-md-4 col-lg-3 mb-4 d-flex';
+                        col.innerHTML = `
+                            <div class="book-card flex-fill d-flex flex-column clickable-card" role="button" tabindex="0">
                                 <img src="${img}" alt="Book cover">
                                 <div class="book-title" title="${info.title || ''}">${title}</div>
                                 <div class="book-author">${authors}</div>
                                 <div class="book-desc">${desc}</div>
-                                <button class="btn btn-outline-primary btn-sm mt-2 details-btn" type="button">Details</button>
                             </div>
                         `;
-                col.querySelector('.details-btn').addEventListener('click', function () {
-                    const modal = new bootstrap.Modal(document.getElementById('loginPromptModal'));
-                    modal.show();
-                });
-                grid.appendChild(col);
-            });
-        }
-        const searchForm = document.getElementById('searchForm');
-        if (searchForm) {
-            searchForm.addEventListener('submit', async function (e) {
-                e.preventDefault();
-                const query = document.getElementById('searchInput').value.trim();
-                if (!query) {
-                    document.getElementById('resultsTitle').textContent = '';
-                    document.getElementById('booksGrid').innerHTML = '';
-                    return;
+                        col.querySelector('.clickable-card').addEventListener('click', function() {
+                            const modal = new bootstrap.Modal(document.getElementById('loginPromptModal'));
+                            modal.show();
+                        });
+
+                        grid.appendChild(col);
+                    });
                 }
-                document.getElementById('resultsTitle').textContent = `Search Results for "${query}"`;
-                const books = await fetchBooks(query, 20, 'relevance');
-                renderBooks(books);
-            });
-        }
-    </script>
-{% endblock %}
+                const searchForm = document.getElementById('searchForm');
+                if (searchForm) {
+                    searchForm.addEventListener('submit', async function(e) {
+                        e.preventDefault();
+                        const query = document.getElementById('searchInput').value.trim();
+                        if (!query) {
+                            document.getElementById('resultsTitle').textContent = '';
+                            document.getElementById('booksGrid').innerHTML = '';
+                            return;
+                        }
+                        document.getElementById('resultsTitle').textContent = `Search Results for "${query}"`;
+                        const books = await fetchBooks(query, 20, 'relevance');
+                        renderBooks(books);
+                    });
+                }
+            </script>
+            
+</body>
+
+</html>

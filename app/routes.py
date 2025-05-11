@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, flash, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
 from .models import User, UserBook, Book, BookShare
 from . import db
-from app import app
+from app import bp
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import desc, func
 import calendar
@@ -10,7 +10,7 @@ from collections import defaultdict
 from datetime import datetime, timezone
 
 # ----------------- Registration -----------------
-@app.route('/register', methods=['GET', 'POST'])
+@bp.route('/register', methods=['GET', 'POST'])
 def register():
     error, success = None, None
     if request.method == 'POST':
@@ -26,11 +26,11 @@ def register():
             db.session.add(User(email=email, username=username, password=hashed_pw))
             db.session.commit()
             success = 'Registration successful! Redirecting to login...'
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('main.login'))
     return render_template('register.html', error=error, success=success)
 
 # ----------------- Login/Logout -----------------
-@app.route('/login', methods=['GET', 'POST'])
+@bp.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
     if request.method == 'POST':
@@ -39,48 +39,51 @@ def login():
         user = User.query.filter_by(username=username).first()
         if user and check_password_hash(user.password, password):
             login_user(user)
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('main.dashboard'))
         error = 'Invalid username or password.'
     return render_template('login.html', error=error)
 
-@app.route('/logout')
+@bp.route('/logout')
 @login_required
 def logout():
     logout_user()
     flash('You have been logged out.', 'info')
-    return redirect(url_for('homepage'))
+    return redirect(url_for('main.homepage'))
+
+@bp.route('/forgot')
+def forgot(): return render_template("forgot.html")
 
 # ----------------- Static Pages -----------------
-@app.route('/')
+@bp.route('/')
 def homepage(): return render_template("homepage.html")
-@app.route('/contact')
+@bp.route('/contact')
 def contact(): return render_template("contact.html")
-@app.route('/terms')
+@bp.route('/terms')
 def terms(): return render_template("terms.html")
-@app.route('/policy')
+@bp.route('/policy')
 def policy(): return render_template("policy.html")
-@app.route('/copyright')
+@bp.route('/copyright')
 def copyright(): return render_template("copyright.html")
 
 # ----------------- Main App Pages -----------------
-@app.route('/dashboard')
+@bp.route('/dashboard')
 @login_required
 def dashboard(): return render_template("dashboard.html")
-@app.route('/explore')
+@bp.route('/explore')
 @login_required
 def explore(): return render_template("explore.html")
-@app.route('/library')
+@bp.route('/library')
 @login_required
 def library(): return render_template("Library.html")
-@app.route('/statistics')
+@bp.route('/statistics')
 @login_required
 def statistics(): return render_template("Statistics.html")
-@app.route('/community')
+@bp.route('/community')
 @login_required
 def community(): return render_template("community.html")
 
 # ----------------- Book/Library APIs -----------------
-@app.route('/my_library_books')
+@bp.route('/my_library_books')
 @login_required
 def my_library_books():
     books = [{
@@ -93,7 +96,7 @@ def my_library_books():
     } for ub in UserBook.query.filter_by(user_id=current_user.id)]
     return jsonify(books)
 
-@app.route('/my_books')
+@bp.route('/my_books')
 @login_required
 def my_books():
     books = [{
@@ -108,7 +111,7 @@ def my_books():
     } for ub in UserBook.query.filter_by(user_id=current_user.id)]
     return jsonify(books)
 
-@app.route('/details')
+@bp.route('/details')
 @login_required
 def details():
     googleid = request.args.get('googleid')
@@ -116,7 +119,7 @@ def details():
         return "No book ID provided.", 400
     return render_template('details.html', googleid=googleid)
 
-@app.route('/add_book', methods=['POST'])
+@bp.route('/add_book', methods=['POST'])
 @login_required
 def add_book():
     data = request.get_json()
@@ -165,7 +168,7 @@ def add_book():
     return jsonify({"success": True, "message": message})
 
 # ----------------- Community/Sharing APIs -----------------
-@app.route('/share_book', methods=['POST'])
+@bp.route('/share_book', methods=['POST'])
 @login_required
 def share_book():
     data = request.get_json()
@@ -193,7 +196,7 @@ def share_book():
         return jsonify({"success": True, "message": f"Book shared with: {', '.join(shared_users)}"})
     return jsonify({"success": False, "message": "No valid users to share with."})
 
-@app.route('/community_feed')
+@bp.route('/community_feed')
 @login_required
 def community_feed():
     shares = BookShare.query.order_by(desc(BookShare.timestamp)).limit(50).all()
@@ -207,7 +210,7 @@ def community_feed():
     } for share in shares]
     return jsonify(feed)
 
-@app.route('/user_suggestions')
+@bp.route('/user_suggestions')
 @login_required
 def user_suggestions():
     term = request.args.get('q', '').strip()
@@ -220,7 +223,7 @@ def user_suggestions():
     return jsonify([u.username for u in users])
 
 # ----------------- Statistics APIs -----------------
-@app.route('/stats/genres')
+@bp.route('/stats/genres')
 @login_required
 def stats_genres():
     results = (
@@ -238,7 +241,7 @@ def stats_genres():
         top_10["Other"] = top_10.get("Other", 0) + others
     return jsonify(top_10)
 
-@app.route('/stats/books_over_time')
+@bp.route('/stats/books_over_time')
 @login_required
 def stats_books_over_time():
     range_type = request.args.get('range', 'months')
@@ -290,7 +293,7 @@ def stats_books_over_time():
         }
     return jsonify(data)
 
-@app.route('/stats/statuses')
+@bp.route('/stats/statuses')
 @login_required
 def stats_statuses():
     results = (
@@ -307,7 +310,7 @@ def stats_statuses():
     status_counts = {status_map.get(status, status.title()): count for status, count in results}
     return jsonify(status_counts)
 
-@app.route('/stats/authors')
+@bp.route('/stats/authors')
 @login_required
 def stats_authors():
     results = (
@@ -325,7 +328,7 @@ def stats_authors():
         top_10["Other"] = top_10.get("Other", 0) + others
     return jsonify(top_10)
 
-@app.route('/stats/avg_pages_by_genre')
+@bp.route('/stats/avg_pages_by_genre')
 @login_required
 def stats_avg_pages_by_genre():
     # You must have a page_count field in Book model for this to work!

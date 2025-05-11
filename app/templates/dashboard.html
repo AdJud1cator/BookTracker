@@ -64,22 +64,22 @@
 {% block content %}
 <div class="container min-vh-100">
     <div class="dashboard-cards">
-        <a href="{{ url_for('explore') }}" class="dashboard-card text-decoration-none">
+        <a href="{{ url_for('main.explore') }}" class="dashboard-card text-decoration-none">
             <div class="icon">📚</div>
             <div class="title">Explore</div>
             <div class="desc">Discover new books, trending titles, and recommendations.</div>
         </a>
-        <a href="{{ url_for('library') }}" class="dashboard-card text-decoration-none">
+        <a href="{{ url_for('main.library') }}" class="dashboard-card text-decoration-none">
             <div class="icon">📖</div>
             <div class="title">Library</div>
             <div class="desc">View and manage your personal book collection and reading status.</div>
         </a>
-        <a href="{{ url_for('community') }}" class="dashboard-card text-decoration-none">
+        <a href="{{ url_for('main.community') }}" class="dashboard-card text-decoration-none">
             <div class="icon">🤝</div>
             <div class="title">Community</div>
             <div class="desc">Connect with other readers and share recommendations.</div>
         </a>
-        <a href="{{ url_for('statistics') }}" class="dashboard-card text-decoration-none">
+        <a href="{{ url_for('main.statistics') }}" class="dashboard-card text-decoration-none">
             <div class="icon">📊</div>
             <div class="title">Statistics</div>
             <div class="desc">Track your reading progress and view personalized stats.</div>

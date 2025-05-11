@@ -43,7 +43,7 @@
             <div class="d-flex align-items-center">
                 <img src="{{ url_for('static', filename='img/BookTracker.png') }}" alt="BookTracker Logo"
                     class="me-2" style="height: 32px;">
-                <a class="navbar-brand fw-bold" href="{{ url_for('homepage') }}">BookTracker</a>
+                <a class="navbar-brand fw-bold" href="{{ url_for('main.homepage') }}">BookTracker</a>
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,12 +51,12 @@
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <div class="navbar-nav">
-                    <a class="nav-link active fw-semibold" aria-current="page" href="{{ url_for('dashboard') }}">Dashboard</a>
-                    <a class="nav-link" href="{{ url_for('explore') }}">Explore</a>
-                    <a class="nav-link" href="{{ url_for('library') }}">Library</a>
-                    <a class="nav-link" href="{{ url_for('community') }}">Community</a>
-                    <a class="nav-link" href="{{ url_for('statistics') }}">Statistics</a>
-                    <a class="nav-link" href="{{ url_for('logout') }}">Sign Out</a>
+                    <a class="nav-link active fw-semibold" aria-current="page" href="{{ url_for('main.dashboard') }}">Dashboard</a>
+                    <a class="nav-link" href="{{ url_for('main.explore') }}">Explore</a>
+                    <a class="nav-link" href="{{ url_for('main.library') }}">Library</a>
+                    <a class="nav-link" href="{{ url_for('main.community') }}">Community</a>
+                    <a class="nav-link" href="{{ url_for('main.statistics') }}">Statistics</a>
+                    <a class="nav-link" href="{{ url_for('main.logout') }}">Sign Out</a>
                 </div>
             </div>
         </div>
@@ -70,9 +70,9 @@
     <footer class="shadow-footer py-4 mt-5">
         <div class="container text-center">
             <div class="mb-3 d-flex flex-wrap justify-content-center align-items-center gap-3">
-                <a href="{{ url_for('terms') }}" class="text-body text-decoration-none">Terms</a>
-                <a href="{{ url_for('policy') }}" class="text-body text-decoration-none">Privacy</a>
-                <a href="{{ url_for('contact') }}" class="text-body text-decoration-none">Team</a>
+                <a href="{{ url_for('main.terms') }}" class="text-body text-decoration-none">Terms</a>
+                <a href="{{ url_for('main.policy') }}" class="text-body text-decoration-none">Privacy</a>
+                <a href="{{ url_for('main.contact') }}" class="text-body text-decoration-none">Team</a>
                 <a href="#" id="darkModeToggleLink" class="text-body text-decoration-none"><span id="darkModeStatus">Dark Mode</span></a>
             </div>
             <div class="mb-3">
