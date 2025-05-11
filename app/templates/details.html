@@ -58,19 +58,19 @@
 
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
     <div class="container">
-      <a class="navbar-brand fw-bold" href="{{ url_for('dashboard') }}">BookTracker</a>
+      <a class="navbar-brand fw-bold" href="{{ url_for('main.dashboard') }}">BookTracker</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <div class="navbar-nav">
-          <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
-          <a class="nav-link" href="{{ url_for('explore') }}">Explore</a>
-          <a class="nav-link" href="{{ url_for('library') }}">Library</a>
-          <a class="nav-link" href="{{ url_for('community') }}">Community</a>
-          <a class="nav-link" href="{{ url_for('statistics') }}">Statistics</a>
-          <a class="nav-link" href="{{ url_for('logout') }}">Sign Out</a>
+          <a class="nav-link" href="{{ url_for('main.dashboard') }}">Dashboard</a>
+          <a class="nav-link" href="{{ url_for('main.explore') }}">Explore</a>
+          <a class="nav-link" href="{{ url_for('main.library') }}">Library</a>
+          <a class="nav-link" href="{{ url_for('main.community') }}">Community</a>
+          <a class="nav-link" href="{{ url_for('main.statistics') }}">Statistics</a>
+          <a class="nav-link" href="{{ url_for('main.logout') }}">Sign Out</a>
         </div>
       </div>
     </div>
@@ -78,7 +78,7 @@
 
   <div class="book-details-container shadow-sm bg-body position-relative">
     <!-- Close Button in top left -->
-    <a href="{{ request.referrer or url_for('homepage') }}" 
+    <a href="{{ request.referrer or url_for('main.homepage') }}" 
        class="btn-close position-absolute" 
        style="top: 1rem; right: 1rem;" 
        aria-label="Close" title="Back"></a>
@@ -133,12 +133,12 @@
     <div class="mb-2">
       <a href="#" id="darkModeToggleLink" class="text-decoration-none text-primary mx-2"><span id="darkModeStatus">Dark
           Mode</span></a> ·
-      <a href="{{ url_for('contact') }}" class="text-decoration-none text-primary mx-2">Contact</a>
+      <a href="{{ url_for('main.contact') }}" class="text-decoration-none text-primary mx-2">Contact</a>
     </div>
     <div>
-      <a href="{{ url_for('terms') }}" class="text-decoration-none text-primary mx-2">Terms & Conditions</a> ·
-      <a href="{{ url_for('policy') }}" class="text-decoration-none text-primary mx-2">Privacy Policy</a> ·
-      <a href="{{ url_for('copyright') }}" class="text-decoration-none text-primary mx-2">Copyright</a>
+      <a href="{{ url_for('main.terms') }}" class="text-decoration-none text-primary mx-2">Terms & Conditions</a> ·
+      <a href="{{ url_for('main.policy') }}" class="text-decoration-none text-primary mx-2">Privacy Policy</a> ·
+      <a href="{{ url_for('main.copyright') }}" class="text-decoration-none text-primary mx-2">Copyright</a>
     </div>
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
