@@ -25,7 +25,7 @@ def register():
             db.session.add(User(email=email, username=username, password=hashed_pw))
             db.session.commit()
             success = 'Registration successful! Redirecting to login...'
-            return redirect(url_for('main.dashboard'))
+            return redirect(url_for('main.login'))
     return render_template('register.html', error=error, success=success)
 
 # ----------------- Login/Logout -----------------
