@@ -18,6 +18,7 @@ Contact Us | Book Tracker
             <a href="mailto:support@booktracker.com" class="text-decoration-none text-primary">support@booktracker.com</a>.
         </p>
 
+
         <form method="post" action="{{ url_for('main.contact') }}">
             <div class="mb-3">
                 <label for="name" class="form-label">Name</label>
@@ -33,7 +34,6 @@ Contact Us | Book Tracker
             </div>
             <button type="submit" class="btn btn-primary w-100">Send Message</button>
         </form>
-
     </div>
 </div>
 {% endblock %}
