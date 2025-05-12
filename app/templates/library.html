@@ -2,165 +2,140 @@
 
 {% block title %}Library - BookTracker{% endblock %}
 
-{% block styles %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 <style>
-  .library-section {
-    max-width: 800px;
-    margin: 3rem auto;
-  }
-
-  .book-mini {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    background: #f8f9fa;
-    border-radius: 0.5rem;
-    padding: 1rem;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-  }
-
-  .book-mini img {
-    width: 60px;
-    height: 90px;
-    object-fit: cover;
-    border-radius: 0.25rem;
-  }
-
-  .dropdown-section .accordion-button:not(.collapsed) {
-    background: #e7f1ff;
-    color: #0d6efd;
+  .section-title {
+    font-size: 1.15rem;
     font-weight: 600;
+    color: var(--bs-primary, #0d6efd);
+    margin-bottom: 0.75rem;
+    margin-top: 2.25rem;
   }
 
-  .book-list-item {
+  .books-grid {
     display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: flex-start;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .book-card {
+    background: var(--bs-body-bg, #fff);
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 1rem;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid #eee;
+    min-width: 170px;
+    max-width: 200px;
+    min-height: 320px;
+    transition: transform 0.15s;
+    color: var(--bs-body-color, #222);
+    text-align: center;
+    text-decoration: none;
+    flex: 1 1 170px;
   }
 
-  .book-list-item:last-child {
-    border-bottom: none;
+  .book-card:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.13);
   }
 
-  .book-list-item img {
-    width: 45px;
-    height: 65px;
+  .book-card img {
+    width: 110px;
+    height: 160px;
     object-fit: cover;
     border-radius: 0.25rem;
+    margin-bottom: 0.75rem;
   }
 
   .book-title {
-    font-weight: 500;
-    font-size: 1.03rem;
-    margin-bottom: 0.15rem;
-    max-width: 270px;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin-bottom: 0.25rem;
+    max-width: 180px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
   .book-author {
-    font-size: 0.93rem;
-    color: #0d6efd;
+    font-size: 0.96rem;
+    color: var(--bs-primary, #0d6efd);
+    margin-bottom: 0.5rem;
+  }
+
+  .book-desc {
+    font-size: 0.92rem;
+    color: var(--bs-secondary-color, #6c757d);
+    margin-bottom: 0.5rem;
+  }
+
+  @media (max-width: 900px) {
+    .book-card {
+      flex: 1 1 45%;
+      max-width: 48%;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .book-card {
+      flex: 1 1 100%;
+      max-width: 100%;
+    }
   }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="library-section py-4 px-3 min-vh-100">
-  <h3 class="fw-semibold mb-3">Last Read / Currently Reading</h3>
-  <div id="lastReadSection" class="mb-4"></div>
-  <div class="dropdown-section accordion" id="libraryAccordion">
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="headingCurrent">
-        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCurrent"
-          aria-expanded="true" aria-controls="collapseCurrent">
-          Currently Reading
-        </button>
-      </h2>
-      <div id="collapseCurrent" class="accordion-collapse collapse show" aria-labelledby="headingCurrent"
-        data-bs-parent="#libraryAccordion">
-        <div class="accordion-body" id="currentlyReadingList"></div>
-      </div>
-    </div>
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="headingCompleted">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-          data-bs-target="#collapseCompleted" aria-expanded="false" aria-controls="collapseCompleted">
-          Completed
-        </button>
-      </h2>
-      <div id="collapseCompleted" class="accordion-collapse collapse" aria-labelledby="headingCompleted"
-        data-bs-parent="#libraryAccordion">
-        <div class="accordion-body" id="completedList"></div>
-      </div>
-    </div>
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="headingWishlist">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-          data-bs-target="#collapseWishlist" aria-expanded="false" aria-controls="collapseWishlist">
-          Wishlist
-        </button>
-      </h2>
-      <div id="collapseWishlist" class="accordion-collapse collapse" aria-labelledby="headingWishlist"
-        data-bs-parent="#libraryAccordion">
-        <div class="accordion-body" id="wishlistList"></div>
-      </div>
-    </div>
-  </div>
+<div class="container my-5 p-4 rounded shadow-sm bg-body">
+  <h2 class="fw-semibold mb-4">Your Library</h2>
+
+  <div class="section-title">Currently Reading</div>
+  <div class="books-grid" id="currentlyReadingGrid"></div>
+
+  <div class="section-title">Completed</div>
+  <div class="books-grid" id="completedGrid"></div>
+
+  <div class="section-title">Wishlist</div>
+  <div class="books-grid" id="wishlistGrid"></div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script>
-  function renderLastRead(books) {
-    const section = document.getElementById('lastReadSection');
-    let book = books.find(b => b.status === 'currently_reading') || books[0];
-    if (!book) {
-      section.innerHTML = '<div class="text-muted">No books in your library yet.</div>';
+  function renderBooksGrid(books, gridId) {
+    const grid = document.getElementById(gridId);
+    grid.innerHTML = '';
+    if (!books || books.length === 0) {
+      grid.innerHTML = `<p style="text-align:center; color:var(--bs-secondary-color); width:100%;">No books in this section.</p>`;
       return;
     }
-    section.innerHTML = `
-        <div class="book-mini">
-            <img src="${book.cover_url}" alt="Book cover">
-            <div>
-                <div class="book-title" title="${book.title}">${book.title}</div>
-                <div class="book-author">${book.author}</div>
-                <a href="/details?googleid=${book.google_id}" class="btn btn-outline-primary btn-sm mt-2">Details</a>
-            </div>
-        </div>
-    `;
-  }
-
-  function renderBookList(books, status, containerId) {
-    const list = books.filter(b => b.status === status);
-    const container = document.getElementById(containerId);
-    if (list.length === 0) {
-      container.innerHTML = '<div class="text-muted">No books in this section.</div>';
-      return;
-    }
-    container.innerHTML = list.map(book => `
-        <div class="book-list-item">
-            <img src="${book.cover_url}" alt="Book cover">
-            <div>
-                <div class="book-title" title="${book.title}">${book.title}</div>
-                <div class="book-author">${book.author}</div>
-                <a href="/details?googleid=${book.google_id}" class="btn btn-outline-primary btn-sm mt-1">Details</a>
-            </div>
-        </div>
-    `).join('');
+    books.forEach(book => {
+      const card = document.createElement('a');
+      card.className = 'book-card';
+      card.href = `/details?googleid=${book.google_id}`;
+      card.innerHTML = `
+            <img src="${book.cover_url || 'https://via.placeholder.com/110x160?text=No+Cover'}" alt="Book cover">
+            <div class="book-title" title="${book.title || ''}">${book.title || 'No Title'}</div>
+            <div class="book-author">${book.author || 'Unknown Author'}</div>
+            <div class="book-desc">${book.description ? book.description.substring(0, 80) + (book.description.length > 80 ? '…' : '') : ''}</div>
+        `;
+      grid.appendChild(card);
+    });
   }
 
   function loadLibrary() {
     fetch('/my_books')
       .then(response => response.json())
       .then(books => {
-        renderLastRead(books);
-        renderBookList(books, 'currently_reading', 'currentlyReadingList');
-        renderBookList(books, 'completed', 'completedList');
-        renderBookList(books, 'wishlist', 'wishlistList');
+        renderBooksGrid(books.filter(b => b.status === 'currently_reading'), 'currentlyReadingGrid');
+        renderBooksGrid(books.filter(b => b.status === 'completed'), 'completedGrid');
+        renderBooksGrid(books.filter(b => b.status === 'wishlist'), 'wishlistGrid');
       });
   }
 
