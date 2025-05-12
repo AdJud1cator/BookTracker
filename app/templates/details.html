@@ -2,97 +2,172 @@
 
 {% block title %}Book Details - BookTracker{% endblock %}
 
-{% block extra_head %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 <style>
-  .book-details-container {
-    max-width: 700px;
+  .book-details-card {
+    max-width: 750px;
     margin: 3rem auto;
-    background: #fff;
+    background: var(--bs-body-bg, #fff);
     border-radius: 0.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-    padding: 2rem;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    padding: 2.5rem 2rem 2rem 2rem;
+    position: relative;
   }
 
-  .book-cover {
+  .book-details-flex {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .book-details-cover {
     width: 150px;
     height: 220px;
     object-fit: cover;
-    border-radius: 0.25rem;
-    margin-right: 2rem;
+    border-radius: 0.35rem;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+    background: #f8f9fa;
+    flex-shrink: 0;
   }
 
-  .book-meta {
+  .book-details-meta {
     flex: 1;
+    min-width: 210px;
+  }
+
+  .book-details-meta h2 {
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: var(--bs-primary, #0d6efd);
+    margin-bottom: 0.7rem;
+  }
+
+  .book-details-meta .meta-item {
+    font-size: 1.02rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .book-details-meta .meta-label {
+    font-weight: 500;
+    color: var(--bs-secondary-color, #6c757d);
+  }
+
+  .book-details-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
   }
 
   .status-btn-group .btn {
     min-width: 140px;
   }
 
-  @media (max-width: 600px) {
+  #statusMessage {
+    min-height: 24px;
+  }
+
+  .loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.7);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s;
+  }
+
+  .loading-spinner {
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid var(--bs-primary, #0d6efd);
+    border-radius: 50%;
+    width: 54px;
+    height: 54px;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (max-width: 700px) {
+    .book-details-card {
+      padding: 1.25rem 0.5rem 1.5rem 0.5rem;
+    }
+
     .book-details-flex {
       flex-direction: column;
       align-items: center;
+      gap: 1.2rem;
     }
 
-    .book-cover {
-      margin-right: 0;
-      margin-bottom: 1rem;
-    }
-
-    .book-meta {
+    .book-details-meta {
       width: 100%;
+      min-width: 0;
+    }
+
+    .book-details-cover {
+      margin: 0 auto;
     }
   }
 </style>
 {% endblock %}
 
 {% block content %}
+<!-- Loading Overlay -->
+<div id="loadingOverlay" class="loading-overlay">
+  <div class="loading-spinner"></div>
+</div>
 
-<div class="book-details-container shadow-sm bg-body position-relative">
-  <!-- Close Button in top left -->
-  <a href="{{ request.referrer or url_for('main.homepage') }}" 
-     class="btn-close position-absolute" 
-     style="top: 1rem; right: 1rem;" 
-     aria-label="Close" title="Back"></a>
+<div id="detailsCard" class="book-details-card shadow-sm bg-body" style="opacity:0; pointer-events:none;">
+  <!-- Close Button -->
+  <a href="{{ request.referrer or url_for('main.homepage') }}" class="btn-close position-absolute"
+    style="top: 1.3rem; right: 1.3rem;" aria-label="Back" title="Back"></a>
 
-  <!-- Main content starts below the X button -->
-  <div class="d-flex book-details-flex mt-5 pt-2">
-
-    <img id="bookCover" class="book-cover" src="" alt="Book cover">
-    <div class="book-meta">
-      <h2 id="bookTitle" class="fw-semibold text-primary"></h2>
-      <div class="mb-2"><strong>Authors:</strong> <span id="bookAuthors"></span></div>
-      <div class="mb-2"><strong>Publisher:</strong> <span id="bookPublisher"></span></div>
-      <div class="mb-2"><strong>Published:</strong> <span id="bookPublished"></span></div>
-      <div class="mb-2"><strong>Page Count:</strong> <span id="bookPages"></span></div>
-      <div class="mb-2"><strong>Categories:</strong> <span id="bookCategories"></span></div>
-
-      <div class="mb-2">
-        <strong>Rating:</strong>
+  <div class="book-details-flex mb-4">
+    <img id="bookCover" class="book-details-cover" src="" alt="Book cover">
+    <div class="book-details-meta">
+      <h2 id="bookTitle"></h2>
+      <div class="meta-item"><span class="meta-label">Authors:</span> <span id="bookAuthors"></span></div>
+      <div class="meta-item"><span class="meta-label">Publisher:</span> <span id="bookPublisher"></span></div>
+      <div class="meta-item"><span class="meta-label">Published:</span> <span id="bookPublished"></span></div>
+      <div class="meta-item"><span class="meta-label">Page Count:</span> <span id="bookPages"></span></div>
+      <div class="meta-item"><span class="meta-label">Categories:</span> <span id="bookCategories"></span></div>
+      <div class="meta-item book-details-rating">
+        <span class="meta-label">Rating:</span>
         <span id="bookRating"></span>
         <small id="ratingsCount" class="text-muted"></small>
       </div>
-      
-      <div class="mb-2"><strong>ISBN:</strong> <span id="bookISBN"></span></div>
+      <div class="meta-item"><span class="meta-label">ISBN:</span> <span id="bookISBN"></span></div>
     </div>
   </div>
   <hr>
   <div class="mb-4">
-    <h5>Add to your Library</h5>
+    <h5 class="fw-semibold mb-2">Add to your Library</h5>
     <div class="status-btn-group btn-group" role="group" aria-label="Reading status">
-      <button type="button" class="btn btn-outline-primary" onclick="setStatus('currently_reading')">Currently Reading</button>
+      <button type="button" class="btn btn-outline-primary" onclick="setStatus('currently_reading')">Currently
+        Reading</button>
       <button type="button" class="btn btn-outline-success" onclick="setStatus('completed')">Completed</button>
       <button type="button" class="btn btn-outline-secondary" onclick="setStatus('wishlist')">Wishlist</button>
     </div>
     <div id="statusMessage" class="mt-3"></div>
   </div>
   <div class="mb-3">
-    <h5>Description</h5>
-    <div id="bookDescription" style="white-space: pre-line;"></div>
+    <h5 class="fw-semibold mb-2">Description</h5>
+    <div id="bookDescription" style="white-space: pre-line; font-size:1.04rem;"></div>
   </div>
-  
-  <a id="previewLink" href="#" target="_blank" class="btn btn-link">Preview on Google Books</a>
+  <a id="previewLink" href="#" target="_blank" class="btn btn-link px-0">Preview on Google Books</a>
 </div>
 {% endblock %}
 
@@ -101,6 +176,18 @@
 <script>
   const googleid = "{{ googleid }}";
   let bookTitle = "", bookAuthors = "", bookCover = "", bookDesc = "", bookGenre = "", pageCount = null;
+
+  function renderStars(rating) {
+    if (!rating) return '';
+    let stars = '';
+    let rounded = Math.round(rating * 2) / 2;
+    for (let i = 1; i <= 5; i++) {
+      if (rounded >= i) stars += '★';
+      else if (rounded >= i - 0.5) stars += '☆';
+      else stars += '☆';
+    }
+    return `<span style="color:#f9bc1a; font-size:1.15em;">${stars}</span>`;
+  }
 
   async function fetchBookDetails() {
     const url = `https://www.googleapis.com/books/v1/volumes/${googleid}`;
@@ -115,7 +202,7 @@
     bookAuthors = (info.authors && info.authors.join(', ')) || 'Unknown Author';
     bookCover = (info.imageLinks && info.imageLinks.thumbnail) || 'https://via.placeholder.com/150x220?text=No+Cover';
     bookDesc = info.description || '';
-    bookGenre = (info.categories && info.categories.length > 0) ? info.categories[0].split('/')[0].trim(): 'Uncategorised';
+    bookGenre = (info.categories && info.categories.length > 0) ? info.categories[0].split('/')[0].trim() : 'Uncategorised';
     pageCount = info.pageCount || null;
 
     document.getElementById('bookCover').src = bookCover;
@@ -125,13 +212,26 @@
     document.getElementById('bookPublished').textContent = info.publishedDate || 'Unknown Date';
     document.getElementById('bookPages').textContent = info.pageCount || 'Unknown';
     document.getElementById('bookCategories').textContent = bookGenre;
+
     let isbn = '-';
     if (info.industryIdentifiers && info.industryIdentifiers.length) {
       isbn = info.industryIdentifiers.map(i => i.identifier).join(', ');
     }
     document.getElementById('bookISBN').textContent = isbn;
-    document.getElementById('bookDescription').innerHTML = bookDesc || 'No description available.';
+
+    document.getElementById('bookDescription').innerHTML = bookDesc || '<span class="text-muted">No description available.</span>';
     document.getElementById('previewLink').href = (info.previewLink || '#');
+
+    // Rating stars and count
+    const rating = info.averageRating;
+    document.getElementById('bookRating').innerHTML = rating ? renderStars(rating) + ` <span style="font-size:1.02em; color:#888;">${rating.toFixed(1)}</span>` : '<span class="text-muted">Not rated</span>';
+    document.getElementById('ratingsCount').textContent = info.ratingsCount ? `(${info.ratingsCount} ratings)` : '';
+
+    // Hide loading, show details
+    document.getElementById('loadingOverlay').style.display = 'none';
+    const card = document.getElementById('detailsCard');
+    card.style.opacity = 1;
+    card.style.pointerEvents = 'auto';
   }
 
   function setStatus(status) {
@@ -149,14 +249,19 @@
         status: status
       })
     })
-    .then(response => response.json())
-    .then(data => {
-      Swal.fire({
-        icon: data.success ? 'success' : 'error',
-        title: data.message
+      .then(response => response.json())
+      .then(data => {
+        Swal.fire({
+          icon: data.success ? 'success' : 'error',
+          title: data.message
+        });
       });
-    });
   }
+
+  // Show loading overlay immediately
+  document.getElementById('loadingOverlay').style.display = 'flex';
+  document.getElementById('detailsCard').style.opacity = 0;
+  document.getElementById('detailsCard').style.pointerEvents = 'none';
 
   fetchBookDetails().then(displayBookDetails);
 </script>
