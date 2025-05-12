@@ -1,75 +1,39 @@
-<!DOCTYPE html>
-<html lang="en" data-bs-theme="light">
-<head>
-    <meta charset="UTF-8" />
-    <title>Contact Us - BookTracker</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../static/css/styles.css" />
-</head>
-<body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="{{ url_for('main.dashboard') }}">BookTracker</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <div class="navbar-nav">
-                    <a class="nav-link" href="{{ url_for('main.dashboard') }}">Dashboard</a>
-                    <a class="nav-link" href="{{ url_for('main.explore') }}">Explore</a>
-                    <a class="nav-link" href="{{ url_for('main.library') }}">Library</a>
-                    <a class="nav-link" href="{{ url_for('main.community') }}">Community</a>
-                    <a class="nav-link" href="{{ url_for('main.statistics') }}">Statistics</a>
-                    <a class="nav-link" href="{{ url_for('main.logout') }}">Sign Out</a>
-                </div>
-            </div>
-        </div>
-    </nav>
+{% extends "base_anon.html" %}
 
-    <main class="container my-5" style="max-width: 600px;">
-        <h1 class="mb-4">Contact Us</h1>
-        <p>If you have any questions, feedback, or need assistance, please fill out the form below or email us at <a href="mailto:support@booktracker.com">support@booktracker.com</a>.</p>
+{% block title %}
+Contact Us | Book Tracker
+{% endblock %}
+
+{% block content %}
+<div class="min-vh-100 d-flex justify-content-center align-items-center">
+    <div class="p-2 p-md-5 rounded shadow w-100" style="max-width: 600px;">
+
+        <h1 class="h4 mb-4 text-center d-flex align-items-center justify-content-center">
+            <img src="{{ url_for('static', filename='img/BookTracker.png') }}" alt="Icon" class="me-2" style="height: 24px;">
+            <span>Contact Us</span>
+        </h1>
+
+        <p class="text-muted text-center small mb-4">
+            Have a question or feedback? Fill out the form below or email us at 
+            <a href="mailto:support@booktracker.com" class="text-decoration-none text-primary">support@booktracker.com</a>.
+        </p>
+
+
         <form method="post" action="{{ url_for('main.contact') }}">
             <div class="mb-3">
-                <label for="name" class="form-label fw-semibold">Name</label>
+                <label for="name" class="form-label">Name</label>
                 <input type="text" class="form-control" id="name" name="name" placeholder="Your full name" required>
             </div>
             <div class="mb-3">
-                <label for="email" class="form-label fw-semibold">Email</label>
+                <label for="email" class="form-label">Email</label>
                 <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" required>
             </div>
             <div class="mb-3">
-                <label for="message" class="form-label fw-semibold">Message</label>
+                <label for="message" class="form-label">Message</label>
                 <textarea class="form-control" id="message" name="message" rows="5" placeholder="Write your message here..." required></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Send Message</button>
+            <button type="submit" class="btn btn-primary w-100">Send Message</button>
         </form>
-    </main>
-
-    <!-- Footer -->
-    <footer class="text-center text-muted mt-5 mb-3 small">
-        <div class="mb-2">
-            <a href="https://www.facebook.com/" class="text-decoration-none text-primary mx-2">Facebook</a> ·
-            <a href="https://www.x.com/" class="text-decoration-none text-primary mx-2">Twitter</a> ·
-            <a href="https://www.instagram.com/" class="text-decoration-none text-primary mx-2">Instagram</a>
-        </div>
-        <div class="mb-2">
-            <a href="#" id="darkModeToggleLink" class="text-decoration-none text-primary mx-2">
-                <span id="darkModeStatus">Dark Mode</span>
-            </a> ·
-            <a href="{{ url_for('main.contact') }}" class="text-decoration-none text-primary mx-2">Contact</a>
-        </div>
-        <div>
-            <a href="{{ url_for('main.terms') }}" class="text-decoration-none text-primary mx-2">Terms & Conditions</a> ·
-            <a href="{{ url_for('main.policy') }}" class="text-decoration-none text-primary mx-2">Privacy Policy</a> ·
-            <a href="{{ url_for('main.copyright') }}" class="text-decoration-none text-primary mx-2">Copyright</a>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ url_for('static', filename='js/dark.js') }}"></script>
-</body>
-</html>
+    </div>
+</div>
+{% endblock %}

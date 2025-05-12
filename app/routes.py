@@ -53,6 +53,8 @@ def logout():
 # ----------------- Static Pages -----------------
 @bp.route('/')
 def homepage(): return render_template("homepage.html")
+@bp.route('/forgot')
+def forgot(): return render_template("forgot.html")
 @bp.route('/contact')
 def contact(): return render_template("contact.html")
 @bp.route('/terms')

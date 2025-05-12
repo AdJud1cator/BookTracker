@@ -1,63 +1,36 @@
-<!DOCTYPE html>
-<html lang="en" data-bs-theme="light">
-<head>
-    <meta charset="UTF-8" />
-    <title>Copyright - BookTracker</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../static/css/styles.css" />
-</head>
-<body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="{{ url_for('main.dashboard') }}">BookTracker</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <div class="navbar-nav">
-                    <a class="nav-link" href="{{ url_for('main.dashboard') }}">Dashboard</a>
-                    <a class="nav-link" href="{{ url_for('main.explore') }}">Explore</a>
-                    <a class="nav-link" href="{{ url_for('main.library') }}">Library</a>
-                    <a class="nav-link" href="{{ url_for('main.community') }}">Community</a>
-                    <a class="nav-link" href="{{ url_for('main.statistics') }}">Statistics</a>
-                    <a class="nav-link" href="{{ url_for('main.logout') }}">Sign Out</a>
-                </div>
-            </div>
-        </div>
-    </nav>
+{% extends "base_anon.html" %}
 
-    <main class="container my-5" style="max-width: 700px;">
-        <h1 class="mb-4">Copyright Notice</h1>
-        <p>© {{ current_year }} BookTracker. All rights reserved.</p>
-        <p>All content, including text, images, logos, and software, is the property of BookTracker or its content suppliers and is protected by copyright laws.</p>
-        <p>You may not reproduce, distribute, or create derivative works from any content without prior written permission.</p>
-        <p>If you believe your copyrighted work has been used in a way that constitutes copyright infringement, please <a href="{{ url_for('main.contact') }}">contact us</a>.</p>
+{% block title %}
+Copyright Notice | Book Tracker
+{% endblock %}
+
+{% block content %}
+<div class="container min-vh-100 d-flex justify-content-center align-items-center">
+    <main class="px-3 px-md-5 py-4 py-md-5 rounded shadow w-100" style="max-width: 700px;">
+
+<h1 class="h3 fw-bold mb-4 text-center d-flex align-items-center justify-content-center">
+    <img src="{{ url_for('static', filename='img/BookTracker.png') }}" alt="BookTracker Logo" class="me-2" style="height: 32px;">
+    Copyright Notice
+</h1>
+
+<blockquote class="border-start border-primary ps-3 fst-italic text-muted mb-4">
+    "All content on this website is protected by copyright. Please review this notice for important legal information."
+</blockquote>
+
+<p>© {{ current_year }} BookTracker. All rights reserved.</p>
+<p>
+    All content, including text, images, logos, and software, is the property of BookTracker or its content
+    suppliers and is protected by copyright laws.
+</p>
+
+        <p>
+            You may not reproduce, distribute, or create derivative works from any content without prior written permission.
+        </p>
+        <p>
+            If you believe your copyrighted work has been used in a way that constitutes copyright infringement,
+            please <a href="{{ url_for('main.contact') }}" class="text-decoration-underline text-primary">contact us</a>.
+        </p>
+
     </main>
-
-    <!-- Footer -->
-    <footer class="text-center text-muted mt-5 mb-3 small">
-        <div class="mb-2">
-            <a href="https://www.facebook.com/" class="text-decoration-none text-primary mx-2">Facebook</a> ·
-            <a href="https://www.x.com/" class="text-decoration-none text-primary mx-2">Twitter</a> ·
-            <a href="https://www.instagram.com/" class="text-decoration-none text-primary mx-2">Instagram</a>
-        </div>
-        <div class="mb-2">
-            <a href="#" id="darkModeToggleLink" class="text-decoration-none text-primary mx-2">
-                <span id="darkModeStatus">Dark Mode</span>
-            </a> ·
-            <a href="{{ url_for('main.contact') }}" class="text-decoration-none text-primary mx-2">Contact</a>
-        </div>
-        <div>
-            <a href="{{ url_for('main.terms') }}" class="text-decoration-none text-primary mx-2">Terms & Conditions</a> ·
-            <a href="{{ url_for('main.policy') }}" class="text-decoration-none text-primary mx-2">Privacy Policy</a> ·
-            <a href="{{ url_for('main.copyright') }}" class="text-decoration-none text-primary mx-2">Copyright</a>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ url_for('static', filename='js/dark.js') }}"></script>
-</body>
-</html>
+</div>
+{% endblock %}

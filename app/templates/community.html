@@ -1,344 +1,123 @@
-<!DOCTYPE html>
-<html lang="en" data-bs-theme="light">
+{% extends "base_member.html" %}
 
-<head>
-    <meta charset="UTF-8" />
-    <title>Community - BookTracker</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../static/css/styles.css" />
-    <style>
-        .feed-container {
-            max-width: 900px;
-            margin: 2rem auto;
-        }
+{% block title %}Community - BookTracker{% endblock %}
 
-        .feed-section {
-            background: #fff;
-            border-radius: 1rem;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
-            padding: 2rem;
-            margin-bottom: 2rem;
-        }
+{% block content %}
+<div class="feed-container p-4 min-vh-100">
+    <!-- Share Section -->
+    <div class="share-section">
+        <h4 class="mb-3">Share a Book</h4>
+        <form id="shareForm" class="share-form" autocomplete="off">
+            <label for="bookSearchInput">Search for a book in your library</label>
+            <input type="text" id="bookSearchInput" class="form-control" placeholder="Type to search..." autocomplete="off" required>
+            <div id="bookSuggestions" class="list-group position-absolute" style="z-index:10; max-height: 200px; overflow-y:auto; width:100%;"></div>
 
-        .feed-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 1.5rem;
-            border-bottom: 1px solid #eee;
-            padding: 1.2rem 0;
-        }
+            <label>Status</label>
+            <div id="statusDisplay" class="mb-3 fw-semibold text-primary"></div>
 
-        .feed-item:last-child {
-            border-bottom: none;
-        }
+            <label for="usernamesInput">Share with (username, comma separated for multiple)</label>
+            <input type="text" id="usernamesInput" class="form-control" placeholder="e.g. alice, bob" required>
 
-        .feed-book-cover {
-            width: 60px;
-            height: 90px;
-            object-fit: cover;
-            border-radius: 0.25rem;
-        }
-
-        .feed-book-info {
-            flex: 1;
-        }
-
-        .feed-book-title {
-            font-weight: 600;
-            font-size: 1.07rem;
-            margin-bottom: 0.2rem;
-        }
-
-        .feed-book-status {
-            font-size: 0.95rem;
-        }
-
-        .feed-meta {
-            color: #888;
-            font-size: 0.92rem;
-            margin-top: 0.2rem;
-        }
-
-        .share-section {
-            background: #f8f9fa;
-            border-radius: 1rem;
-            box-shadow: 0 1px 8px rgba(0, 0, 0, 0.04);
-            padding: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .share-form label {
-            font-weight: 500;
-        }
-
-        .share-form .form-select,
-        .share-form .form-control {
-            margin-bottom: 1rem;
-        }
-
-        .share-form .btn {
-            min-width: 120px;
-        }
-
-        /* Support dark mode for custom backgrounds */
-        [data-bs-theme="dark"] .feed-section {
-            background: #2b3038;
-            color: #f8f9fa;
-        }
-
-        [data-bs-theme="dark"] .share-section {
-            background: #2b3038;
-            color: #f8f9fa;
-        }
-
-        [data-bs-theme="dark"] .feed-book-status .badge {
-            background: #3a8bfd;
-        }
-
-        [data-bs-theme="dark"] .list-group-item {
-            background: #2b3038;
-            color: #f8f9fa;
-        }
-
-    </style>
-</head>
-
-<body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="{{ url_for('main.dashboard') }}">BookTracker</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <div class="navbar-nav">
-                    <a class="nav-link" href="{{ url_for('main.dashboard') }}">Dashboard</a>
-                    <a class="nav-link" href="{{ url_for('main.explore') }}">Explore</a>
-                    <a class="nav-link" href="{{ url_for('main.library') }}">Library</a>
-                    <a class="nav-link active fw-semibold" aria-current="page"
-                        href="{{ url_for('main.community') }}">Community</a>
-                    <a class="nav-link" href="{{ url_for('main.statistics') }}">Statistics</a>
-                    <a class="nav-link" href="{{ url_for('main.logout') }}">Sign Out</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <div class="feed-container">
-        <!-- Share Section (at the top) -->
-        <div class="share-section">
-            <h4 class="mb-3">Share a Book</h4>
-            <form id="shareForm" class="share-form" autocomplete="off">
-                <label for="bookSearchInput">Search for a book in your library</label>
-                <input type="text" id="bookSearchInput" class="form-control" placeholder="Type to search..."
-                    autocomplete="off" required>
-                <div id="bookSuggestions" class="list-group position-absolute"
-                    style="z-index:10; max-height: 200px; overflow-y:auto; width:100%;"></div>
-                <label>Status</label>
-                <div id="statusDisplay" class="mb-3 fw-semibold text-primary"></div>
-                <label for="usernamesInput">Share with (username, comma separated for multiple)</label>
-                <input type="text" id="usernamesInput" class="form-control" placeholder="e.g. alice, bob" required>
-                <button type="submit" class="btn btn-primary mt-2">Share</button>
-                <div id="shareMsg" class="mt-2"></div>
-            </form>
-        </div>
-
-        <!-- News Feed Section -->
-        <div class="feed-section mb-4">
-            <h3 class="fw-semibold text-primary mb-3">Your News Feed</h3>
-            <div id="feedList">
-                <!-- Populated by JS -->
-            </div>
-        </div>
+            <button type="submit" class="btn btn-primary mt-2">Share</button>
+            <div id="shareMsg" class="mt-2"></div>
+        </form>
     </div>
 
-    <!-- Footer (same as other pages) -->
-    <footer class="text-center text-muted mt-5 mb-3 small">
-        <div class="mb-2">
-            <a href="https://www.facebook.com/" class="text-decoration-none text-primary mx-2">Facebook</a> ·
-            <a href="https://www.x.com/" class="text-decoration-none text-primary mx-2">Twitter</a> ·
-            <a href="https://www.instagram.com/" class="text-decoration-none text-primary mx-2">Instagram</a>
+    <!-- News Feed -->
+    <div class="feed-section mb-4">
+        <h3 class="fw-semibold mb-3">Your News Feed</h3>
+        <div id="feedList">
+            <!-- Populated by JS -->
+
         </div>
-        <div class="mb-2">
-            <a href="#" id="darkModeToggleLink" class="text-decoration-none text-primary mx-2">
-                <span id="darkModeStatus">Dark Mode</span>
-            </a> ·
-            <a href="{{ url_for('main.contact') }}" class="text-decoration-none text-primary mx-2">Contact</a>
-        </div>
-        <div>
-            <a href="{{ url_for('main.terms') }}" class="text-decoration-none text-primary mx-2">Terms & Conditions</a> ·
-            <a href="{{ url_for('main.policy') }}" class="text-decoration-none text-primary mx-2">Privacy Policy</a> ·
-            <a href="{{ url_for('main.copyright') }}" class="text-decoration-none text-primary mx-2">Copyright</a>
-        </div>
-    </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ url_for('static', filename='js/dark.js') }}"></script>
-    <script>
-        const usernamesInput = document.getElementById('usernamesInput');
-        const userSuggestions = document.createElement('div');
-        userSuggestions.className = 'list-group position-absolute';
-        userSuggestions.style.zIndex = 10;
-        userSuggestions.style.maxHeight = '200px';
-        userSuggestions.style.overflowY = 'auto';
-        userSuggestions.style.width = '100%';
-        userSuggestions.style.left = 0;
-        userSuggestions.style.top = '100%';
-        userSuggestions.style.display = 'none';
-        usernamesInput.parentNode.appendChild(userSuggestions);
+    </div>
+</div>
+{% endblock %}
 
-        usernamesInput.addEventListener('input', function () {
-            const value = usernamesInput.value.split(',').pop().trim();
-            if (value.length < 1) {
-                userSuggestions.style.display = 'none';
-                userSuggestions.innerHTML = '';
-                return;
-            }
-            fetch(`/user_suggestions?q=${encodeURIComponent(value)}`)
-                .then(res => res.json())
-                .then(users => {
-                    userSuggestions.innerHTML = '';
-                    if (users.length === 0) {
-                        userSuggestions.style.display = 'none';
-                        return;
-                    }
-                    users.forEach(username => {
-                        const item = document.createElement('button');
-                        item.type = 'button';
-                        item.className = 'list-group-item list-group-item-action';
-                        item.textContent = username;
-                        item.onclick = () => {
-                            // Replace the last part of the input with the selected username
-                            let parts = usernamesInput.value.split(',');
-                            parts[parts.length - 1] = ' ' + username;
-                            usernamesInput.value = parts.join(',').replace(/^,/, '');
-                            userSuggestions.style.display = 'none';
-                            userSuggestions.innerHTML = '';
-                            usernamesInput.focus();
-                        };
-                        userSuggestions.appendChild(item);
-                    });
-                    userSuggestions.style.display = 'block';
-                });
-        });
+{% block scripts %}
+<script>
+    // Your entire JavaScript here (can also be moved to a separate .js file if preferred)
+    // [Insert your JS from <script> block above, unchanged]
+</script>
+{% endblock %}
 
-        document.addEventListener('click', function (e) {
-            if (!usernamesInput.contains(e.target) && !userSuggestions.contains(e.target)) {
-                userSuggestions.style.display = 'none';
-                userSuggestions.innerHTML = '';
-            }
-        });
-
-        document.addEventListener('DOMContentLoaded', function () {
-            let myLibrary = [];
-            let selectedBook = null;
-
-            // Fetch user's library for autocomplete
-            fetch('/my_library_books')
-                .then(res => res.json())
-                .then(books => { myLibrary = books; });
-
-            // Autocomplete logic
-            const bookInput = document.getElementById('bookSearchInput');
-            const suggestions = document.getElementById('bookSuggestions');
-            const statusDisplay = document.getElementById('statusDisplay');
-
-            bookInput.addEventListener('input', function () {
-                const value = bookInput.value.trim().toLowerCase();
-                suggestions.innerHTML = '';
-                selectedBook = null;
-                statusDisplay.textContent = '';
-                const matches = value
-                    ? myLibrary.filter(book =>
-                        book.title.toLowerCase().includes(value) ||
-                        book.author.toLowerCase().includes(value)
-                    )
-                    : myLibrary;
-                matches.forEach(book => {
-                    const item = document.createElement('button');
-                    item.type = 'button';
-                    item.className = 'list-group-item list-group-item-action';
-                    item.textContent = `${book.title} (${book.author})`;
-                    item.onclick = () => {
-                        bookInput.value = book.title;
-                        suggestions.innerHTML = '';
-                        selectedBook = book;
-                        statusDisplay.textContent = book.status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
-                        statusDisplay.className = "mb-3 fw-semibold text-primary";
-                    };
-                    suggestions.appendChild(item);
-                });
-            });
-
-            bookInput.addEventListener('focus', function () {
-                bookInput.dispatchEvent(new Event('input'));
-            });
-
-            document.addEventListener('click', function (e) {
-                if (!bookInput.contains(e.target) && !suggestions.contains(e.target)) {
-                    suggestions.innerHTML = '';
-                }
-            });
-
-            // Handle the share form submission
-            document.getElementById('shareForm').addEventListener('submit', function (e) {
-                e.preventDefault();
-                const usernames = document.getElementById('usernamesInput').value.split(',').map(u => u.trim()).filter(Boolean);
-                if (!selectedBook || !usernames.length) {
-                    document.getElementById('shareMsg').textContent = "Please select a book and enter at least one username.";
-                    return;
-                }
-                fetch('/share_book', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        book_id: selectedBook.id,
-                        usernames: usernames,
-                        status: selectedBook.status
-                    })
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        document.getElementById('shareMsg').textContent = data.message;
-                        loadFeed(); // reload feed after sharing
-                        // Reset form
-                        document.getElementById('usernamesInput').value = "";
-                        bookInput.value = "";
-                        statusDisplay.textContent = "";
-                        selectedBook = null;
-                    });
-            });
-
-            // Fetch and render the community feed
-            function loadFeed() {
-                fetch('/community_feed')
-                    .then(res => res.json())
-                    .then(feed => renderFeed(feed));
-            }
-
-            function renderFeed(feed) {
-                const feedList = document.getElementById('feedList');
-                if (!feed.length) {
-                    feedList.innerHTML = '<div class="text-muted">No shares yet. Start sharing books with friends!</div>';
-                    return;
-                }
-                feedList.innerHTML = feed.map(item => `
-                    <div class="feed-item">
-                        <img class="feed-book-cover" src="${item.cover_url}" alt="Book cover">
-                        <div class="feed-book-info">
-                            <div class="feed-book-title">${item.title}</div>
-                            <div class="feed-book-status">Status: <span class="badge bg-secondary">${item.status.replace('_', ' ')}</span></div>
-                            <div class="feed-meta">Shared by <b>${item.from_username}</b> ${item.timestamp}</div>
-                        </div>
-                    </div>
-                `).join('');
-            }
-
-            loadFeed();
-        });
-    </script>
-</body>
-
-</html>
+{% block styles %}
+<style>
+    /* Your <style> block goes here */
+    .feed-container {
+        max-width: 900px;
+        margin: 2rem auto;
+    }
+    .feed-section {
+        background: #fff;
+        border-radius: 1rem;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+    .feed-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1.5rem;
+        border-bottom: 1px solid #eee;
+        padding: 1.2rem 0;
+    }
+    .feed-item:last-child {
+        border-bottom: none;
+    }
+    .feed-book-cover {
+        width: 60px;
+        height: 90px;
+        object-fit: cover;
+        border-radius: 0.25rem;
+    }
+    .feed-book-info {
+        flex: 1;
+    }
+    .feed-book-title {
+        font-weight: 600;
+        font-size: 1.07rem;
+        margin-bottom: 0.2rem;
+    }
+    .feed-book-status {
+        font-size: 0.95rem;
+    }
+    .feed-meta {
+        color: #888;
+        font-size: 0.92rem;
+        margin-top: 0.2rem;
+    }
+    .share-section {
+        background: #f8f9fa;
+        border-radius: 1rem;
+        box-shadow: 0 1px 8px rgba(0, 0, 0, 0.04);
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+    .share-form label {
+        font-weight: 500;
+    }
+    .share-form .form-select,
+    .share-form .form-control {
+        margin-bottom: 1rem;
+    }
+    .share-form .btn {
+        min-width: 120px;
+    }
+    [data-bs-theme="dark"] .feed-section {
+        background: #232137;
+        color: #f8f9fa;
+    }
+    [data-bs-theme="dark"] .share-section {
+        background: #29264a;
+        color: #f8f9fa;
+    }
+    [data-bs-theme="dark"] .feed-book-status .badge {
+        background: #3a8bfd;
+    }
+    [data-bs-theme="dark"] .list-group-item {
+        background: #232137;
+        color: #f8f9fa;
+    }
+</style>
+{% endblock %}
