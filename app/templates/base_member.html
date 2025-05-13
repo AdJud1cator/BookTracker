@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="auto">
+
 <head>
     <meta charset="UTF-8" />
     <link rel="icon" href="{{ url_for('static', filename='img/BookTracker.png') }}" type="image/x-icon">
@@ -21,6 +22,7 @@
         .shadow-navbar {
             box-shadow: 0 0.75rem 1rem rgba(0, 0, 0, 0.15);
         }
+
         [data-bs-theme="dark"] .shadow-navbar {
             box-shadow: 0 0.75rem 1rem rgba(0, 0, 0, 0.35);
         }
@@ -28,6 +30,7 @@
         .shadow-footer {
             box-shadow: 0 -0.75rem 1rem rgba(0, 0, 0, 0.10);
         }
+
         [data-bs-theme="dark"] .shadow-footer {
             box-shadow: 0 -0.75rem 1rem rgba(0, 0, 0, 0.25);
         }
@@ -35,14 +38,15 @@
 
     {% block head %}{% endblock %}
 </head>
+
 <body>
 
     <!-- Navbar for logged-in members -->
-    <nav class="navbar navbar-expand-lg shadow-navbar " >
+    <nav class="navbar navbar-expand-lg shadow-navbar ">
         <div class="container">
             <div class="d-flex align-items-center">
-                <img src="{{ url_for('static', filename='img/BookTracker.png') }}" alt="BookTracker Logo"
-                    class="me-2" style="height: 32px;">
+                <img src="{{ url_for('static', filename='img/BookTracker.png') }}" alt="BookTracker Logo" class="me-2"
+                    style="height: 32px;">
                 <a class="navbar-brand fw-bold" href="{{ url_for('main.homepage') }}">BookTracker</a>
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -51,11 +55,16 @@
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <div class="navbar-nav">
-                    <a class="nav-link active fw-semibold" aria-current="page" href="{{ url_for('main.dashboard') }}">Dashboard</a>
-                    <a class="nav-link" href="{{ url_for('main.explore') }}">Explore</a>
-                    <a class="nav-link" href="{{ url_for('main.library') }}">Library</a>
-                    <a class="nav-link" href="{{ url_for('main.community') }}">Community</a>
-                    <a class="nav-link" href="{{ url_for('main.statistics') }}">Statistics</a>
+                    <a class="nav-link {% if active_page == 'dashboard' %}active fw-semibold{% endif %}"
+                        aria-current="page" href="{{ url_for('main.dashboard') }}">Dashboard</a>
+                    <a class="nav-link {% if active_page == 'explore' %}active fw-semibold{% endif %}"
+                        href="{{ url_for('main.explore') }}">Explore</a>
+                    <a class="nav-link {% if active_page == 'library' %}active fw-semibold{% endif %}"
+                        href="{{ url_for('main.library') }}">Library</a>
+                    <a class="nav-link {% if active_page == 'community' %}active fw-semibold{% endif %}"
+                        href="{{ url_for('main.community') }}">Community</a>
+                    <a class="nav-link {% if active_page == 'statistics' %}active fw-semibold{% endif %}"
+                        href="{{ url_for('main.statistics') }}">Statistics</a>
                     <a class="nav-link" href="{{ url_for('main.logout') }}">Sign Out</a>
                 </div>
             </div>
@@ -73,12 +82,16 @@
                 <a href="{{ url_for('main.terms') }}" class="text-body text-decoration-none">Terms</a>
                 <a href="{{ url_for('main.policy') }}" class="text-body text-decoration-none">Privacy</a>
                 <a href="{{ url_for('main.contact') }}" class="text-body text-decoration-none">Team</a>
-                <a href="#" id="darkModeToggleLink" class="text-body text-decoration-none"><span id="darkModeStatus">Dark Mode</span></a>
+                <a href="#" id="darkModeToggleLink" class="text-body text-decoration-none"><span
+                        id="darkModeStatus">Dark Mode</span></a>
             </div>
             <div class="mb-3">
-                <a href="https://www.facebook.com" target="_blank" class="text-body text-decoration-none mx-2"><i class="fab fa-facebook-f fa-lg"></i></a>
-                <a href="https://x.com" target="_blank" class="text-body text-decoration-none mx-2" aria-label="X (formerly Twitter)"><i class="fab fa-x-twitter fa-lg"></i></a>
-                <a href="https://www.instagram.com" target="_blank" class="text-body text-decoration-none mx-2"><i class="fab fa-instagram fa-lg"></i></a>
+                <a href="https://www.facebook.com" target="_blank" class="text-body text-decoration-none mx-2"><i
+                        class="fab fa-facebook-f fa-lg"></i></a>
+                <a href="https://x.com" target="_blank" class="text-body text-decoration-none mx-2"
+                    aria-label="X (formerly Twitter)"><i class="fab fa-x-twitter fa-lg"></i></a>
+                <a href="https://www.instagram.com" target="_blank" class="text-body text-decoration-none mx-2"><i
+                        class="fab fa-instagram fa-lg"></i></a>
             </div>
             <div>
                 <small>&copy; 2025 BookTracker</small>
@@ -88,8 +101,10 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+        integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+        crossorigin="anonymous"></script>
     <script src="{{ url_for('static', filename='js/dark.js') }}"></script>
     {% block scripts %}{% endblock %}
 </body>
+
 </html>
