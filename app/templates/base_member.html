@@ -16,23 +16,6 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 
-    <!-- Adaptive shadow styles -->
-    <style>
-        .shadow-navbar {
-            box-shadow: 0 0.75rem 1rem rgba(0, 0, 0, 0.15);
-        }
-        [data-bs-theme="dark"] .shadow-navbar {
-            box-shadow: 0 0.75rem 1rem rgba(0, 0, 0, 0.35);
-        }
-
-        .shadow-footer {
-            box-shadow: 0 -0.75rem 1rem rgba(0, 0, 0, 0.10);
-        }
-        [data-bs-theme="dark"] .shadow-footer {
-            box-shadow: 0 -0.75rem 1rem rgba(0, 0, 0, 0.25);
-        }
-    </style>
-
     {% block head %}{% endblock %}
 </head>
 <body>

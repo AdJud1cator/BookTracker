@@ -2,51 +2,6 @@
 
 {% block title %}Book Details - BookTracker{% endblock %}
 
-{% block extra_head %}
-<style>
-  .book-details-container {
-    max-width: 700px;
-    margin: 3rem auto;
-    background: #fff;
-    border-radius: 0.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-    padding: 2rem;
-  }
-
-  .book-cover {
-    width: 150px;
-    height: 220px;
-    object-fit: cover;
-    border-radius: 0.25rem;
-    margin-right: 2rem;
-  }
-
-  .book-meta {
-    flex: 1;
-  }
-
-  .status-btn-group .btn {
-    min-width: 140px;
-  }
-
-  @media (max-width: 600px) {
-    .book-details-flex {
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .book-cover {
-      margin-right: 0;
-      margin-bottom: 1rem;
-    }
-
-    .book-meta {
-      width: 100%;
-    }
-  }
-</style>
-{% endblock %}
-
 {% block content %}
 
 <div class="book-details-container shadow-sm bg-body position-relative">

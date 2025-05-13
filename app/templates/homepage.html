@@ -2,74 +2,10 @@
 
 {% block title %}BookTracker - Your Reading Journey{% endblock %}
 
-{% block head %}
-<style>
-    .book-card {
-        background: #fff;
-        border-radius: 0.5rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-        padding: 1rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-height: 320px;
-        transition: transform 0.15s;
-        height: 100%;
-    }
-
-    .book-card:hover {
-        transform: translateY(-4px) scale(1.03);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.13);
-    }
-
-    .book-card img {
-        width: 110px;
-        height: 160px;
-        object-fit: cover;
-        border-radius: 0.25rem;
-        margin-bottom: 0.75rem;
-    }
-
-    .book-title {
-        font-weight: 600;
-        font-size: 1.05rem;
-        margin-bottom: 0.25rem;
-        text-align: center;
-        max-width: 180px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .book-author {
-        font-size: 0.96rem;
-        color: #0d6efd;
-        margin-bottom: 0.5rem;
-        text-align: center;
-    }
-
-    .book-desc {
-        font-size: 0.92rem;
-        color: #555;
-        text-align: center;
-    }
-
-    [data-bs-theme="dark"] .book-card {
-        background: #232137;
-        color: #f8f9fa;
-    }
-
-    [data-bs-theme="dark"] .book-card img {
-        background: #1a1a2a;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
 <!-- Hero Section -->
-<div class="position-relative" style="height: 75vh;">
-    <div class="position-absolute top-0 start-0 w-100 h-100"
-        style="background-image: url('{{ url_for("static", filename="img/Back_Landing.png") }}'); background-size: cover; background-position: center;">
+<div class="position-relative hero-section">
+    <div class="position-absolute top-0 start-0 w-100 h-100 homepage-bg">
         <div class="position-absolute top-0 start-0 w-100 h-100 bg-black opacity-75"></div>
     </div>
     <div class="container position-relative d-flex flex-column justify-content-center align-items-center text-center h-100 z-1">
@@ -82,8 +18,7 @@
     <!-- Search Box -->
     <div class="py-4 search-box text-center mb-5">
         <h3 class=" fw-semibold mb-3">Find your next great read</h3>
-        <form id="searchForm" class="d-flex justify-content-center flex-column flex-sm-row" role="search"
-            style="max-width: 600px; margin: 0 auto;">
+        <form id="searchForm" class="d-flex justify-content-center flex-column flex-sm-row" role="search">
             <input class="form-control form-control-lg rounded-start mb-3 mb-sm-0" type="search" id="searchInput"
                 placeholder="Search by title, author, or ISBN..." aria-label="Search" autocomplete="off" required />
             <button class="btn btn-primary btn-lg rounded-end ms-sm-2" type="submit">Search</button>
@@ -125,7 +60,7 @@
                     <div class="card h-100 shadow-sm">
                         <div class="card-body text-center">
                             <img src="{{ url_for('static', filename='img/Track_reading.png') }}" alt="Track Books"
-                                class="mb-3" style="height: 40px;">
+                                class="mb-3 feature-icon">
                             <h5 class="card-title">Track Your Reading</h5>
                             <p class="card-text">Track books you've read and want to read easily in one place.</p>
                         </div>
@@ -136,7 +71,7 @@
                     <div class="card h-100 shadow-sm">
                         <div class="card-body text-center">
                             <img src="{{ url_for('static', filename='img/Digital_Book.png') }}" alt="Discover Books"
-                                class="mb-3" style="height: 40px;">
+                                class="mb-3 feature-icon">
                             <h5 class="card-title">Book Discovery</h5>
                             <p class="card-text">Discover new books tailored to your reading preferences.</p>
                         </div>
@@ -147,7 +82,7 @@
                     <div class="card h-100 shadow-sm">
                         <div class="card-body text-center">
                             <img src="{{ url_for('static', filename='img/Sharing.png') }}" alt="Community Sharing"
-                                class="mb-3" style="height: 40px;">
+                                class="mb-3 feature-icon">
                             <h5 class="card-title">Connect & Share</h5>
                             <p class="card-text">Connect with fellow readers and share book recommendations.</p>
                         </div>
@@ -158,7 +93,7 @@
                     <div class="card h-100 shadow-sm">
                         <div class="card-body text-center">
                             <img src="{{ url_for('static', filename='img/Stats.png') }}" alt="Reading Insights"
-                                class="mb-3" style="height: 40px;">
+                                class="mb-3 feature-icon">
                             <h5 class="card-title">Reading Insights</h5>
                             <p class="card-text">Get personalized reading statistics and performance insights.</p>
                         </div>

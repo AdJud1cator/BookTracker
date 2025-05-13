@@ -2,18 +2,9 @@
 
 {% block title %}Statistics - BookTracker{% endblock %}
 
-{% block head %}
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        .stats-container { max-width: 1100px; margin: 2rem auto; }
-        .chart-card { background: #fff; border-radius: 1rem; box-shadow: 0 2px 12px rgba(0,0,0,0.07); padding: 2rem; margin-bottom: 2rem; }
-        .chart-title { font-weight: 600; color: #0d6efd; margin-bottom: 1rem; }
-        @media (max-width: 900px) {
-            .chart-card { padding: 1rem; }
-        }
-        [data-bs-theme="dark"] .chart-card { background: #232137; color: #f8f9fa; }
-    </style>
-{% endblock %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
 {% block content %}
 <div class="stats-container px-4">
