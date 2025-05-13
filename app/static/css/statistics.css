@@ -70,9 +70,3 @@
         padding: 1rem;
     }
 }
-
-[data-bs-theme="dark"] .chart-card,
-[data-bs-theme="dark"] .stat-card {
-    background: #232137;
-    color: #f8f9fa;
-}
