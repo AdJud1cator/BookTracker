@@ -1,0 +1,116 @@
+.book-details-card {
+    max-width: 750px;
+    margin: 3rem auto;
+    background: var(--bs-body-bg, #fff);
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    padding: 2.5rem 2rem 2rem 2rem;
+    position: relative;
+}
+
+.book-details-flex {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.book-details-cover {
+    width: 150px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 0.35rem;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+    background: #f8f9fa;
+    flex-shrink: 0;
+}
+
+.book-details-meta {
+    flex: 1;
+    min-width: 210px;
+}
+
+.book-details-meta h2 {
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: var(--bs-primary, #0d6efd);
+    margin-bottom: 0.7rem;
+}
+
+.book-details-meta .meta-item {
+    font-size: 1.02rem;
+    margin-bottom: 0.4rem;
+}
+
+.book-details-meta .meta-label {
+    font-weight: 500;
+    color: var(--bs-secondary-color, #6c757d);
+}
+
+.book-details-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.status-btn-group .btn {
+    min-width: 140px;
+}
+
+#statusMessage {
+    min-height: 24px;
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.7);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s;
+}
+
+.loading-spinner {
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid var(--bs-primary, #0d6efd);
+    border-radius: 50%;
+    width: 54px;
+    height: 54px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 700px) {
+    .book-details-card {
+        padding: 1.25rem 0.5rem 1.5rem 0.5rem;
+    }
+
+    .book-details-flex {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.2rem;
+    }
+
+    .book-details-meta {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .book-details-cover {
+        margin: 0 auto;
+    }
+}
