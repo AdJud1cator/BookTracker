@@ -8,22 +8,8 @@ from sqlalchemy import desc, func
 import calendar, re
 from collections import defaultdict
 from datetime import datetime, timezone
-from flask_wtf import FlaskForm
-from wtforms import SubmitField, StringField, PasswordField
-from wtforms.validators import DataRequired
+from app.forms import RegistrationForm, LoginForm
 
-# ----------------- Forms -----------------
-class RegistrationForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired()])
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    confirm_password = PasswordField('Confirm Password', validators=[DataRequired()])
-    submit = SubmitField('Register')
-
-class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    submit = SubmitField('Login')
 
 # ----------------- Registration -----------------
 @bp.route('/register', methods=['GET', 'POST'])
