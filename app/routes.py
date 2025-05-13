@@ -5,43 +5,93 @@ from . import db
 from app import bp
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import desc, func
-import calendar
+import calendar, re
 from collections import defaultdict
 from datetime import datetime, timezone
+from app.forms import RegistrationForm, LoginForm
+
 
 # ----------------- Registration -----------------
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
+    form = RegistrationForm()
     error, success = None, None
-    if request.method == 'POST':
-        email = request.form.get('email')
-        username = request.form.get('username')
-        password = request.form.get('password')
-        if not username or not password:
-            error = 'Please provide both username and password.'
-        elif User.query.filter_by(username=username).first():
-            error = 'Username already exists.'
-        else:
+    if form.validate_on_submit():
+        email = form.email.data
+        username = form.username.data
+        password = form.password.data
+        confirm_password = form.confirm_password.data
+        
+        # Checks for errors
+        if not username:
+            form.username.errors.append('Username is required')
+
+        if len(username) < 5:
+            form.username.errors.append('Username must be at least 5 characters')
+
+        if User.query.filter_by(username=username).first():
+            form.username.errors.append('Username already exists')
+
+        if not email:
+            form.email.errors.append('Email is required')
+
+        if not re.match(r'^[\w\.-]+@([\w-]+\.)+[\w-]{2,4}$', email):
+            form.email.errors.append('Invalid email address')
+
+        if User.query.filter_by(email=email).first():
+            form.email.errors.append('Email already exists')
+
+        if not password:
+            form.password.errors.append('Password is required')
+
+        if len(password) < 6:
+            form.password.errors.append('Password must be at least 6 characters')
+
+        if not re.match(r'.*[a-z].*', password):
+            form.password.errors.append('Password must contain a lowercase letter')
+
+        if not re.match(r'.*[A-Z].*', password):
+            form.password.errors.append('Password must contain an uppercase letter')
+        
+        if not re.match(r'.*\d.*', password):
+            form.password.errors.append('Password must contain a number')
+
+        if not confirm_password:
+            form.confirm_password.errors.append('Must confirm password')
+
+        if not password==confirm_password:
+            form.confirm_password.errors.append('Passwords do not match')
+
+
+        if not (form.username.errors or form.email.errors or form.password.errors or form.confirm_password.errors):
+            # Create new user
             hashed_pw = generate_password_hash(password)
             db.session.add(User(email=email, username=username, password=hashed_pw))
             db.session.commit()
             success = 'Registration successful! Redirecting to login...'
             return redirect(url_for('main.login'))
-    return render_template('register.html', error=error, success=success)
+        
+    return render_template('register.html', form=form, error=error, success=success)
 
 # ----------------- Login/Logout -----------------
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
-    error = None
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
+    form = LoginForm()
+    error, success = None, None
+    
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
         user = User.query.filter_by(username=username).first()
+        
         if user and check_password_hash(user.password, password):
+            success = 'Registration successful! Redirecting to login...'
             login_user(user)
             return redirect(url_for('main.dashboard'))
-        error = 'Invalid username or password.'
-    return render_template('login.html', error=error)
+        else: 
+            form.username.errors.append('Invalid username or password')
+
+    return render_template('login.html', form=form, error=error, success=success)
 
 @bp.route('/logout')
 @login_required
