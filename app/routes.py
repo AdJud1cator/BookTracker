@@ -102,17 +102,42 @@ def logout():
 
 # ----------------- Static Pages -----------------
 @bp.route('/')
-def homepage(): return render_template("homepage.html")
+def homepage():  
+    if current_user.is_authenticated:
+        base_template = "base_member.html"
+    else:
+        base_template = "base_anon.html"
+    return render_template("homepage.html", base_template=base_template)
 @bp.route('/forgot')
 def forgot(): return render_template("forgot.html")
 @bp.route('/contact')
-def contact(): return render_template("contact.html")
+def contact(): 
+    if current_user.is_authenticated:
+        base_template = "base_member.html"
+    else:
+        base_template = "base_anon.html"
+    return render_template("contact.html", base_template=base_template)
 @bp.route('/terms')
-def terms(): return render_template("terms.html")
+def terms(): 
+    if current_user.is_authenticated:
+        base_template = "base_member.html"
+    else:
+        base_template = "base_anon.html"
+    return render_template("terms.html", base_template=base_template)
 @bp.route('/policy')
-def policy(): return render_template("policy.html")
+def policy(): 
+    if current_user.is_authenticated:
+        base_template = "base_member.html"
+    else:
+        base_template = "base_anon.html"
+    return render_template("policy.html", base_template=base_template)
 @bp.route('/copyright')
-def copyright(): return render_template("copyright.html")
+def copyright(): 
+    if current_user.is_authenticated:
+        base_template = "base_member.html"
+    else:
+        base_template = "base_anon.html"
+    return render_template("z.html", base_template=base_template)
 
 # ----------------- Main App Pages -----------------
 @bp.route('/dashboard')
