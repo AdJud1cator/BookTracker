@@ -79,94 +79,98 @@
     </div>
 </div>
 
-    <!-- Search Box -->
-    <div class="py-4 search-box text-center mb-5">
-        <h3 class=" fw-semibold mb-3">Find your next great read</h3>
-        <form id="searchForm" class="d-flex justify-content-center flex-column flex-sm-row" role="search"
-            style="max-width: 600px; margin: 0 auto;">
-            <input class="form-control form-control-lg rounded-start mb-3 mb-sm-0" type="search" id="searchInput"
-                placeholder="Search by title, author, or ISBN..." aria-label="Search" autocomplete="off" required />
-            <button class="btn btn-primary btn-lg rounded-end ms-sm-2" type="submit">Search</button>
-        </form>
-        <div id="resultsTitle" class="mt-4 mb-2"></div>
-        <div class="container">
-        <div class="row justify-content-center" id="booksGrid"></div>
+<!-- Search Box -->
+<div class="py-4 search-box text-center mb-5">
+    <h3 class=" fw-semibold mb-3">Find your next great read</h3>
+    <form id="searchForm" class="d-flex justify-content-center flex-column flex-sm-row" role="search" style="max-width: 600px; margin: 0 auto;">
+        <input class="form-control form-control-lg rounded-start mb-3 mb-sm-0" type="search" id="searchInput"
+            placeholder="Search by title, author, or ISBN..." aria-label="Search" autocomplete="off" required />
+        <button class="btn btn-primary btn-lg rounded-end ms-sm-2" type="submit">Search</button>
+    </form>
+    <div id="resultsTitle" class="mt-4 mb-2"></div>
+    <div id="loadingBar" style="display:none; text-align:center; margin:2rem 0;">
+        <div class="spinner-border text-primary" role="status" style="width:2.5rem; height:2.5rem;">
+            <span class="visually-hidden">Loading...</span>
         </div>
     </div>
+    <div class="container">
+    <div class="row justify-content-center" id="booksGrid"></div>
+    </div>
+</div>
 
-    <!-- Login Modal -->
-    <div class="modal fade" id="loginPromptModal" tabindex="-1" aria-labelledby="loginPromptModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="loginPromptModalLabel">Sign In Required</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<!-- Login Modal -->
+<div class="modal fade" id="loginPromptModal" tabindex="-1" aria-labelledby="loginPromptModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginPromptModalLabel">Sign In Required</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                You need to sign in to view book details and add books to your library.
+            </div>
+            <div class="modal-footer">
+                <a href="{{ url_for('main.login') }}" class="btn btn-primary">Sign In</a>
+                <a href="{{ url_for('main.register') }}" class="btn btn-outline-primary">Sign Up</a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Feature List Section -->
+<div class="py-5 text-center">
+    <h2 class="fw-bold mb-4 ">Features</h2>
+    <div class="container">
+        <div class="row g-4">
+            <!-- Feature 1 -->
+            <div class="col-md-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <img src="{{ url_for('static', filename='img/Track_reading.png') }}" alt="Track Books"
+                            class="mb-3" style="height: 40px;">
+                        <h5 class="card-title">Track Your Reading</h5>
+                        <p class="card-text">Track books you've read and want to read easily in one place.</p>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    You need to sign in to view book details and add books to your library.
+            </div>
+            <!-- Feature 2 -->
+            <div class="col-md-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <img src="{{ url_for('static', filename='img/Digital_Book.png') }}" alt="Discover Books"
+                            class="mb-3" style="height: 40px;">
+                        <h5 class="card-title">Book Discovery</h5>
+                        <p class="card-text">Discover new books tailored to your reading preferences.</p>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <a href="{{ url_for('main.login') }}" class="btn btn-primary">Sign In</a>
-                    <a href="{{ url_for('main.register') }}" class="btn btn-outline-primary">Sign Up</a>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+            <!-- Feature 3 -->
+            <div class="col-md-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <img src="{{ url_for('static', filename='img/Sharing.png') }}" alt="Community Sharing"
+                            class="mb-3" style="height: 40px;">
+                        <h5 class="card-title">Connect & Share</h5>
+                        <p class="card-text">Connect with fellow readers and share book recommendations.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Feature 4 -->
+            <div class="col-md-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <img src="{{ url_for('static', filename='img/Stats.png') }}" alt="Reading Insights"
+                            class="mb-3" style="height: 40px;">
+                        <h5 class="card-title">Reading Insights</h5>
+                        <p class="card-text">Get personalized reading statistics and performance insights.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Feature List Section -->
-    <div class="py-5 text-center">
-        <h2 class="fw-bold mb-4 ">Features</h2>
-        <div class="container">
-            <div class="row g-4">
-                <!-- Feature 1 -->
-                <div class="col-md-3">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body text-center">
-                            <img src="{{ url_for('static', filename='img/Track_reading.png') }}" alt="Track Books"
-                                class="mb-3" style="height: 40px;">
-                            <h5 class="card-title">Track Your Reading</h5>
-                            <p class="card-text">Track books you've read and want to read easily in one place.</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Feature 2 -->
-                <div class="col-md-3">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body text-center">
-                            <img src="{{ url_for('static', filename='img/Digital_Book.png') }}" alt="Discover Books"
-                                class="mb-3" style="height: 40px;">
-                            <h5 class="card-title">Book Discovery</h5>
-                            <p class="card-text">Discover new books tailored to your reading preferences.</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Feature 3 -->
-                <div class="col-md-3">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body text-center">
-                            <img src="{{ url_for('static', filename='img/Sharing.png') }}" alt="Community Sharing"
-                                class="mb-3" style="height: 40px;">
-                            <h5 class="card-title">Connect & Share</h5>
-                            <p class="card-text">Connect with fellow readers and share book recommendations.</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Feature 4 -->
-                <div class="col-md-3">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body text-center">
-                            <img src="{{ url_for('static', filename='img/Stats.png') }}" alt="Reading Insights"
-                                class="mb-3" style="height: 40px;">
-                            <h5 class="card-title">Reading Insights</h5>
-                            <p class="card-text">Get personalized reading statistics and performance insights.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+</div>
 
 <!-- FAQ Section -->
 <section class="py-5">
@@ -249,22 +253,35 @@
                 const desc = info.description ? info.description.substring(0, 80) + (info.description.length > 80 ? '…' : '') : '';
                 const col = document.createElement('div');
                 col.className = 'col-sm-6 col-md-4 col-lg-3 mb-4 d-flex';
+                const detailsUrl = `/details?googleid=${book.id}`;
                 col.innerHTML = `
-                            <div class="book-card flex-fill d-flex flex-column">
-                                <img src="${img}" alt="Book cover">
-                                <div class="book-title" title="${info.title || ''}">${title}</div>
-                                <div class="book-author">${authors}</div>
-                                <div class="book-desc">${desc}</div>
-                                <button class="btn btn-outline-primary btn-sm mt-2 details-btn" type="button">Details</button>
-                            </div>
-                        `;
-                col.querySelector('.details-btn').addEventListener('click', function () {
+                    <a href="${detailsUrl}" class="book-card flex-fill d-flex flex-column" style="text-decoration:none; cursor:pointer;">
+                        <img src="${img}" alt="Book cover">
+                        <div class="book-title" title="${info.title || ''}">${title}</div>
+                        <div class="book-author">${authors}</div>
+                        <div class="book-desc">${desc}</div>
+                    </a>
+                `;
+                // Attach click event to the card link to show modal instead of navigating
+                col.querySelector('a').addEventListener('click', function(e) {
+                    e.preventDefault(); // Prevent navigation
                     const modal = new bootstrap.Modal(document.getElementById('loginPromptModal'));
                     modal.show();
                 });
                 grid.appendChild(col);
             });
         }
+
+        function showLoadingBar() {
+        document.getElementById('loadingBar').style.display = 'block';
+        document.getElementById('booksGrid').style.display = 'none';
+        }
+
+        function hideLoadingBar() {
+        document.getElementById('loadingBar').style.display = 'none';
+        document.getElementById('booksGrid').style.display = 'flex';
+        }
+
         const searchForm = document.getElementById('searchForm');
         if (searchForm) {
             searchForm.addEventListener('submit', async function (e) {
@@ -276,8 +293,10 @@
                     return;
                 }
                 document.getElementById('resultsTitle').textContent = `Search Results for "${query}"`;
+                showLoadingBar();
                 const books = await fetchBooks(query, 20, 'relevance');
                 renderBooks(books);
+                hideLoadingBar();
             });
         }
     </script>
