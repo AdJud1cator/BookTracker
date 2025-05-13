@@ -108,8 +108,6 @@ def homepage():
     else:
         base_template = "base_anon.html"
     return render_template("homepage.html", base_template=base_template)
-@bp.route('/forgot')
-def forgot(): return render_template("forgot.html")
 @bp.route('/contact')
 def contact(): 
     if current_user.is_authenticated:
@@ -137,7 +135,10 @@ def copyright():
         base_template = "base_member.html"
     else:
         base_template = "base_anon.html"
-    return render_template("z.html", base_template=base_template)
+    return render_template("copyright.html", base_template=base_template)
+
+@bp.route('/forgot')
+def forgot(): return render_template("forgot.html")
 
 # ----------------- Main App Pages -----------------
 @bp.route('/dashboard')
