@@ -67,19 +67,19 @@ def copyright(): return render_template("copyright.html")
 # ----------------- Main App Pages -----------------
 @bp.route('/dashboard')
 @login_required
-def dashboard(): return render_template("dashboard.html")
+def dashboard(): return render_template("dashboard.html", active_page='dashboard')
 @bp.route('/explore')
 @login_required
-def explore(): return render_template("explore.html")
+def explore(): return render_template("explore.html", active_page='explore')
 @bp.route('/library')
 @login_required
-def library(): return render_template("library.html")
+def library(): return render_template("library.html", active_page='library')
 @bp.route('/statistics')
 @login_required
-def statistics(): return render_template("statistics.html")
+def statistics(): return render_template("statistics.html", active_page='statistics')
 @bp.route('/community')
 @login_required
-def community(): return render_template("community.html")
+def community(): return render_template("community.html", active_page='community')
 
 @bp.route('/all_usernames')
 @login_required
