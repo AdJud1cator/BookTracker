@@ -316,7 +316,7 @@ def community_feed():
         feed.append({
             'title': book.title,
             'cover_url': book.cover_url,
-            'status': share.status,
+            'status': share.status.title(),
             'from_username': share.from_user.username,
             'to_username': share.to_user.username,
             'timestamp': share.timestamp.strftime('%Y-%m-%d %H:%M'),
