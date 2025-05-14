@@ -1,6 +1,4 @@
-from flask import Blueprint
-bp = Blueprint('main', __name__)
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash, Blueprint
 from flask_login import login_user, logout_user, login_required, current_user
 from .models import User
 from . import db
@@ -8,10 +6,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import re
 from app.forms import RegistrationForm, LoginForm
 
-
-
 # ----------------- Registration -----------------
 
+bp = Blueprint('main', __name__)
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
