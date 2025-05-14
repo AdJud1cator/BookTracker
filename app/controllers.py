@@ -1,176 +1,15 @@
-from flask import render_template, request, redirect, url_for, flash, jsonify
-from flask_login import login_user, logout_user, login_required, current_user
+from flask import request, jsonify
+from flask_login import login_required, current_user
 from .models import User, UserBook, Book, BookShare
 from . import db
-from app import bp
-from werkzeug.security import generate_password_hash, check_password_hash
+from app.routes import bp
 from sqlalchemy import desc, func
-import calendar, re
+import calendar
 from collections import defaultdict
 from datetime import datetime, timezone
-from app.forms import RegistrationForm, LoginForm
 
 
-# ----------------- Registration -----------------
-@bp.route('/register', methods=['GET', 'POST'])
-def register():
-    form = RegistrationForm()
-    error, success = None, None
-    if form.validate_on_submit():
-        email = form.email.data
-        username = form.username.data
-        password = form.password.data
-        confirm_password = form.confirm_password.data
-        
-        # Checks for errors
-        if not username:
-            form.username.errors.append('Username is required')
-
-        if len(username) < 5:
-            form.username.errors.append('Username must be at least 5 characters')
-
-        if User.query.filter_by(username=username).first():
-            form.username.errors.append('Username already exists')
-
-        if not email:
-            form.email.errors.append('Email is required')
-
-        if not re.match(r'^[\w\.-]+@([\w-]+\.)+[\w-]{2,4}$', email):
-            form.email.errors.append('Invalid email address')
-
-        if User.query.filter_by(email=email).first():
-            form.email.errors.append('Email already exists')
-
-        if not password:
-            form.password.errors.append('Password is required')
-
-        if len(password) < 6:
-            form.password.errors.append('Password must be at least 6 characters')
-
-        if not re.match(r'.*[a-z].*', password):
-            form.password.errors.append('Password must contain a lowercase letter')
-
-        if not re.match(r'.*[A-Z].*', password):
-            form.password.errors.append('Password must contain an uppercase letter')
-        
-        if not re.match(r'.*\d.*', password):
-            form.password.errors.append('Password must contain a number')
-
-        if not confirm_password:
-            form.confirm_password.errors.append('Must confirm password')
-
-        if not password==confirm_password:
-            form.confirm_password.errors.append('Passwords do not match')
-
-
-        if not (form.username.errors or form.email.errors or form.password.errors or form.confirm_password.errors):
-            # Create new user
-            hashed_pw = generate_password_hash(password)
-            db.session.add(User(email=email, username=username, password=hashed_pw))
-            db.session.commit()
-            success = 'Registration successful! Redirecting to login...'
-            return redirect(url_for('main.login'))
-        
-    return render_template('register.html', form=form, error=error, success=success)
-
-# ----------------- Login/Logout -----------------
-@bp.route('/login', methods=['GET', 'POST'])
-def login():
-    form = LoginForm()
-    error, success = None, None
-    
-    if form.validate_on_submit():
-        username = form.username.data
-        password = form.password.data
-        user = User.query.filter_by(username=username).first()
-        
-        if user and check_password_hash(user.password, password):
-            success = 'Registration successful! Redirecting to login...'
-            login_user(user)
-            return redirect(url_for('main.dashboard'))
-        else: 
-            form.username.errors.append('Invalid username or password')
-
-    return render_template('login.html', form=form, error=error, success=success)
-
-@bp.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    flash('You have been logged out.', 'info')
-    return redirect(url_for('main.homepage'))
-
-# ----------------- Static Pages -----------------
-@bp.route('/')
-def homepage():  
-    if current_user.is_authenticated:
-        base_template = "base_member.html"
-    else:
-        base_template = "base_anon.html"
-    return render_template("homepage.html", base_template=base_template)
-@bp.route('/contact')
-def contact(): 
-    if current_user.is_authenticated:
-        base_template = "base_member.html"
-    else:
-        base_template = "base_anon.html"
-    return render_template("contact.html", base_template=base_template)
-@bp.route('/terms')
-def terms(): 
-    if current_user.is_authenticated:
-        base_template = "base_member.html"
-    else:
-        base_template = "base_anon.html"
-    return render_template("terms.html", base_template=base_template)
-@bp.route('/policy')
-def policy(): 
-    if current_user.is_authenticated:
-        base_template = "base_member.html"
-    else:
-        base_template = "base_anon.html"
-    return render_template("policy.html", base_template=base_template)
-@bp.route('/copyright')
-def copyright(): 
-    if current_user.is_authenticated:
-        base_template = "base_member.html"
-    else:
-        base_template = "base_anon.html"
-    return render_template("copyright.html", base_template=base_template)
-
-@bp.route('/forgot')
-def forgot(): return render_template("forgot.html")
-
-# ----------------- Main App Pages -----------------
-@bp.route('/dashboard')
-@login_required
-def dashboard(): 
-    # Fetch the news feed for the current user
-    feed_items = BookShare.query\
-        .filter(
-            (BookShare.from_user_id == current_user.id) |
-            (BookShare.to_user_id == current_user.id)
-        )\
-        .order_by(BookShare.timestamp.desc())\
-        .limit(10).all()
-
-    # Check if there are any items in the feed
-    has_feed = len(feed_items) > 0
-
-    return render_template("dashboard.html", active_page='dashboard', has_feed=has_feed)
-
-@bp.route('/explore')
-@login_required
-def explore(): return render_template("explore.html", active_page='explore')
-@bp.route('/library')
-@login_required
-def library(): return render_template("library.html", active_page='library')
-@bp.route('/statistics')
-@login_required
-def statistics(): return render_template("statistics.html", active_page='statistics')
-@bp.route('/community')
-@login_required
-def community(): return render_template("community.html", active_page='community')
-
+# Lists Users
 @bp.route('/all_usernames')
 @login_required
 def all_usernames():
@@ -179,13 +18,7 @@ def all_usernames():
     usernames = [user.username for user in users]
     return jsonify(usernames)
 
-@bp.route('/current_username')
-@login_required
-def current_username():
-    return jsonify({'username': current_user.username})
-
-
-# ----------------- Book/Library APIs -----------------
+# ----------------- Library APIs -----------------
 @bp.route('/my_library_books')
 @login_required
 def my_library_books():
@@ -203,7 +36,6 @@ def my_library_books():
         for user_book in user_books
     ])
 
-
 @bp.route('/my_books')
 @login_required
 def my_books():
@@ -219,13 +51,9 @@ def my_books():
     } for ub in UserBook.query.filter_by(user_id=current_user.id)]
     return jsonify(books)
 
-@bp.route('/details')
-@login_required
-def details():
-    googleid = request.args.get('googleid')
-    if not googleid:
-        return "No book ID provided.", 400
-    return render_template('details.html', googleid=googleid)
+
+
+# ----------------- Add Book API -----------------
 
 @bp.route('/add_book', methods=['POST'])
 @login_required
@@ -275,7 +103,9 @@ def add_book():
     db.session.commit()
     return jsonify({"success": True, "message": message})
 
-# ----------------- Community/Sharing APIs -----------------
+
+# ----------------- Book Sharing APIs -----------------
+
 @bp.route('/share_book', methods=['POST'])
 @login_required
 def share_book():
@@ -313,6 +143,7 @@ def share_book():
 
     return jsonify({'success': True, 'message': f'Shared "{user_book.book.title}" with {username}.'})
 
+
 @bp.route('/community_feed')
 @login_required
 def community_feed():
@@ -330,7 +161,7 @@ def community_feed():
         feed.append({
             'title': book.title,
             'cover_url': book.cover_url,
-            'status': share.status.title(),
+            'status': share.status,
             'from_username': share.from_user.username,
             'to_username': share.to_user.username,
             'timestamp': share.timestamp.strftime('%Y-%m-%d %H:%M'),
@@ -344,7 +175,9 @@ def community_feed():
         'pages': shares.pages
     })
 
+
 # ----------------- Statistics APIs -----------------
+
 @bp.route('/stats/summary')
 @login_required
 def stats_summary():
@@ -420,6 +253,7 @@ def stats_summary():
         "shortest_book": shortest_book,
         "books_shared": books_shared or 0,
     })
+
 
 @bp.route('/stats/books_over_time')
 @login_required

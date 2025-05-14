@@ -3,9 +3,8 @@
 {% block title %}Dashboard - BookTracker{% endblock %}
 
 {% block head %}
-
 <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
-
+<link rel="stylesheet" href="{{ url_for('static', filename='css/community.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -30,7 +29,25 @@
             <div class="icon">📊</div>
             <div class="title">Statistics</div>
             <div class="desc">Track your reading progress and view personalized stats.</div>
-        </a>
+        </a>      
+    </div>
+
+    <!-- News Feed Section -->
+    <div class="container my-5 p-4 rounded shadow-sm bg-body" style="max-width:900px;">
+        {% if has_feed %}
+        <div class="community-card">
+            <div class="section-title" style="margin-top:0;">Your News Feed</div>
+            <div id="feedList" class="feed-list"></div>
+            <div id="feedPagination" class="feed-pagination"></div>
+        </div>
+        {% else %}
+        <div class="section-title" style="margin-top:0;">Your News Feed</div>
+        <div class="text-muted">No news feed requests yet. Start sharing books!</div>
+        {% endif %}
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/community.js') }}"></script>
 {% endblock %}
