@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
@@ -27,5 +27,6 @@ def create_app():
     from app import controllers 
 
     app.register_blueprint(routes.bp)
+    bp = Blueprint('main', __name__)
 
     return app

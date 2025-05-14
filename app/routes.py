@@ -12,7 +12,7 @@ bp = Blueprint('main', __name__)
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
-    error = None
+    error, success = None, None
     if form.validate_on_submit():
         email = form.email.data
         username = form.username.data
@@ -67,7 +67,7 @@ def register():
             db.session.commit()
             return redirect(url_for('main.login'))
         
-    return render_template('register.html', form=form, error=error)
+    return render_template('register.html', form=form, error=error, success=success)
 
 
 # ----------------- Login/Logout -----------------
@@ -75,7 +75,7 @@ def register():
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    error = None
+    error, success = None, success
     
     if form.validate_on_submit():
         username = form.username.data
@@ -89,7 +89,7 @@ def login():
         else: 
             form.username.errors.append('Invalid username or password')
 
-    return render_template('login.html', form=form, error=error)
+    return render_template('login.html', form=form, error=error, success=success)
 
 @bp.route('/logout')
 @login_required
