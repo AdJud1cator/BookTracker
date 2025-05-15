@@ -1,14 +1,14 @@
-from flask import render_template, request, redirect, url_for, flash, Blueprint
+from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from .models import User
 from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
 import re
 from app.forms import RegistrationForm, LoginForm
+from .blueprints import bp
 
 # ----------------- Registration -----------------
 
-bp = Blueprint('main', __name__)
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
@@ -69,13 +69,12 @@ def register():
         
     return render_template('register.html', form=form, error=error, success=success)
 
-
 # ----------------- Login/Logout -----------------
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    error, success = None, success
+    error, success = None, None
     
     if form.validate_on_submit():
         username = form.username.data
