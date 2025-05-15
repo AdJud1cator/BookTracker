@@ -3,66 +3,9 @@
 {% block title %}BookTracker - Your Reading Journey{% endblock %}
 
 {% block head %}
-<style>
-    .book-card {
-        background: #fff;
-        border-radius: 0.5rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-        padding: 1rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-height: 320px;
-        transition: transform 0.15s;
-        height: 100%;
-    }
 
-    .book-card:hover {
-        transform: translateY(-4px) scale(1.03);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.13);
-    }
+<link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
 
-    .book-card img {
-        width: 110px;
-        height: 160px;
-        object-fit: cover;
-        border-radius: 0.25rem;
-        margin-bottom: 0.75rem;
-    }
-
-    .book-title {
-        font-weight: 600;
-        font-size: 1.05rem;
-        margin-bottom: 0.25rem;
-        text-align: center;
-        max-width: 180px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .book-author {
-        font-size: 0.96rem;
-        color: #0d6efd;
-        margin-bottom: 0.5rem;
-        text-align: center;
-    }
-
-    .book-desc {
-        font-size: 0.92rem;
-        color: #555;
-        text-align: center;
-    }
-
-    [data-bs-theme="dark"] .book-card {
-        background: #232137;
-        color: #f8f9fa;
-    }
-
-    [data-bs-theme="dark"] .book-card img {
-        background: #1a1a2a;
-    }
-</style>
 {% endblock %}
 
 {% block content %}
@@ -229,77 +172,7 @@
 {% endblock %}
 
 {% block scripts %}
-    <script>
-        // --- Search Functionality ---
-        async function fetchBooks(query, maxResults = 20, orderBy = 'relevance') {
-            const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=${maxResults}&orderBy=${orderBy}`;
-            const resp = await fetch(url);
-            const data = await resp.json();
-            return (data.items || []);
-        }
-        function truncateTitle(title, maxLength = 50) {
-            return title.length > maxLength ? title.substring(0, maxLength - 1) + '…' : title;
-        }
-        function renderBooks(books) {
-            const grid = document.getElementById('booksGrid');
-            grid.innerHTML = '';
-            if (books.length === 0) {
-                grid.innerHTML = '<p style="text-align:center; color:#888; width:100%;">No books found.</p>';
-                return;
-            }
-            books.forEach(book => {
-                const info = book.volumeInfo || {};
-                const img = (info.imageLinks && info.imageLinks.thumbnail) || 'https://via.placeholder.com/110x160?text=No+Cover';
-                const title = info.title ? truncateTitle(info.title) : 'No Title';
-                const authors = (info.authors && info.authors.join(', ')) || 'Unknown Author';
-                const desc = info.description ? info.description.substring(0, 80) + (info.description.length > 80 ? '…' : '') : '';
-                const col = document.createElement('div');
-                col.className = 'col-sm-6 col-md-4 col-lg-3 mb-4 d-flex';
-                const detailsUrl = `/details?googleid=${book.id}`;
-                col.innerHTML = `
-                    <a href="${detailsUrl}" class="book-card flex-fill d-flex flex-column" style="text-decoration:none; cursor:pointer;">
-                        <img src="${img}" alt="Book cover">
-                        <div class="book-title" title="${info.title || ''}">${title}</div>
-                        <div class="book-author">${authors}</div>
-                        <div class="book-desc">${desc}</div>
-                    </a>
-                `;
-                // Attach click event to the card link to show modal instead of navigating
-                col.querySelector('a').addEventListener('click', function(e) {
-                    e.preventDefault(); // Prevent navigation
-                    const modal = new bootstrap.Modal(document.getElementById('loginPromptModal'));
-                    modal.show();
-                });
-                grid.appendChild(col);
-            });
-        }
 
-        function showLoadingBar() {
-        document.getElementById('loadingBar').style.display = 'block';
-        document.getElementById('booksGrid').style.display = 'none';
-        }
+<script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
 
-        function hideLoadingBar() {
-        document.getElementById('loadingBar').style.display = 'none';
-        document.getElementById('booksGrid').style.display = 'flex';
-        }
-
-        const searchForm = document.getElementById('searchForm');
-        if (searchForm) {
-            searchForm.addEventListener('submit', async function (e) {
-                e.preventDefault();
-                const query = document.getElementById('searchInput').value.trim();
-                if (!query) {
-                    document.getElementById('resultsTitle').textContent = '';
-                    document.getElementById('booksGrid').innerHTML = '';
-                    return;
-                }
-                document.getElementById('resultsTitle').textContent = `Search Results for "${query}"`;
-                showLoadingBar();
-                const books = await fetchBooks(query, 20, 'relevance');
-                renderBooks(books);
-                hideLoadingBar();
-            });
-        }
-    </script>
 {% endblock %}

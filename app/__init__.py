@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from config import Config
+from .errors import register_error_handlers
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -28,5 +29,7 @@ def create_app():
 
     app.register_blueprint(routes.bp)
     bp = Blueprint('main', __name__)
+
+    register_error_handlers(app)
 
     return app
