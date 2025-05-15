@@ -8,7 +8,8 @@ from sqlalchemy import desc, func
 import calendar, re
 from collections import defaultdict
 from datetime import datetime, timezone
-from app.forms import RegistrationForm, LoginForm
+from app.forms import RegistrationForm, LoginForm, DeleteBookForm
+
 
 
 # ----------------- Registration -----------------
@@ -147,9 +148,14 @@ def dashboard(): return render_template("dashboard.html", active_page='dashboard
 @bp.route('/explore')
 @login_required
 def explore(): return render_template("explore.html", active_page='explore')
+
 @bp.route('/library')
 @login_required
-def library(): return render_template("library.html", active_page='library')
+def library():
+    user_books = UserBook.query.filter_by(user_id=current_user.id).all()
+    form = DeleteBookForm()
+    return render_template('library.html', books=user_books, form=form)
+
 @bp.route('/statistics')
 @login_required
 def statistics(): return render_template("statistics.html", active_page='statistics')
@@ -172,24 +178,6 @@ def current_username():
 
 
 # ----------------- Book/Library APIs -----------------
-@bp.route('/my_library_books')
-@login_required
-def my_library_books():
-    user_books = UserBook.query.filter_by(user_id=current_user.id).all()
-    return jsonify([
-        {
-            "id": user_book.id,
-            "google_id": user_book.book.google_id,
-            "title": user_book.book.title,
-            "author": user_book.book.author,
-            "cover_url": user_book.book.cover_url,
-            "status": user_book.status,
-            "description": user_book.book.description or "",
-        }
-        for user_book in user_books
-    ])
-
-
 @bp.route('/my_books')
 @login_required
 def my_books():
@@ -260,6 +248,19 @@ def add_book():
         ))
     db.session.commit()
     return jsonify({"success": True, "message": message})
+
+@bp.route('/delete_book/<int:user_book_id>', methods=['POST'])
+@login_required
+def delete_book(user_book_id):
+    user_book = UserBook.query.get_or_404(user_book_id)
+    if user_book.user_id != current_user.id:
+        flash("Unauthorized access.", "danger")
+        return redirect(url_for('main.library'))
+    db.session.delete(user_book)
+    db.session.commit()
+    flash("Book deleted successfully.", "success")
+    return redirect(url_for('main.library'))
+
 
 # ----------------- Community/Sharing APIs -----------------
 @bp.route('/share_book', methods=['POST'])
