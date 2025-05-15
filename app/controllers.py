@@ -2,7 +2,7 @@ from flask import request, jsonify
 from flask_login import login_required, current_user
 from .models import User, UserBook, Book, BookShare
 from . import db
-from app.routes import bp
+from app.blueprints import bp
 from sqlalchemy import desc, func
 import calendar
 from collections import defaultdict
@@ -161,7 +161,7 @@ def community_feed():
         feed.append({
             'title': book.title,
             'cover_url': book.cover_url,
-            'status': share.status,
+            'status': share.status.title(),
             'from_username': share.from_user.username,
             'to_username': share.to_user.username,
             'timestamp': share.timestamp.strftime('%Y-%m-%d %H:%M'),
