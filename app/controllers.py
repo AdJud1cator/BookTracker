@@ -103,7 +103,6 @@ def add_book():
     db.session.commit()
     return jsonify({"success": True, "message": message})
 
-
 # ----------------- Delete Book API -----------------
 
 @bp.route('/delete_book/<int:user_book_id>', methods=['POST'])
@@ -117,8 +116,7 @@ def delete_book(user_book_id):
     db.session.commit()
     flash("Book deleted successfully.", "success")
     return redirect(url_for('main.library'))
-
-
+  
 # ----------------- Book Sharing APIs -----------------
 
 @bp.route('/share_book', methods=['POST'])
