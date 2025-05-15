@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request, jsonify, redirect, url_for, flash
 from flask_login import login_required, current_user
 from .models import User, UserBook, Book, BookShare
 from . import db
@@ -103,7 +103,20 @@ def add_book():
     db.session.commit()
     return jsonify({"success": True, "message": message})
 
+# ----------------- Delete Book API -----------------
 
+@bp.route('/delete_book/<int:user_book_id>', methods=['POST'])
+@login_required
+def delete_book(user_book_id):
+    user_book = UserBook.query.get_or_404(user_book_id)
+    if user_book.user_id != current_user.id:
+        flash("Unauthorized access.", "danger")
+        return redirect(url_for('main.library'))
+    db.session.delete(user_book)
+    db.session.commit()
+    flash("Book deleted successfully.", "success")
+    return redirect(url_for('main.library'))
+  
 # ----------------- Book Sharing APIs -----------------
 
 @bp.route('/share_book', methods=['POST'])

@@ -1,10 +1,10 @@
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
-from .models import User
+from .models import User, UserBook
 from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
 import re
-from app.forms import RegistrationForm, LoginForm
+from app.forms import RegistrationForm, LoginForm, DeleteBookForm
 from .blueprints import bp
 
 # ----------------- Registration -----------------
@@ -148,9 +148,14 @@ def dashboard(): return render_template("dashboard.html", active_page='dashboard
 @bp.route('/explore')
 @login_required
 def explore(): return render_template("explore.html", active_page='explore')
+
 @bp.route('/library')
 @login_required
-def library(): return render_template("library.html", active_page='library')
+def library():
+    user_books = UserBook.query.filter_by(user_id=current_user.id).all()
+    form = DeleteBookForm()
+    return render_template('library.html', books=user_books, form=form)
+
 @bp.route('/statistics')
 @login_required
 def statistics(): return render_template("statistics.html", active_page='statistics')

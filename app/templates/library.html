@@ -12,19 +12,36 @@
 <div class="container my-5 p-4 rounded shadow-sm bg-body">
   <h2 class="fw-semibold mb-4">Your Library</h2>
 
-  <div class="section-title">Currently Reading</div>
-  <div class="books-grid" id="currentlyReadingGrid"></div>
+  {% set sections = {'currently_reading': 'Currently Reading', 'completed': 'Completed', 'wishlist': 'Wishlist'} %}
+  {% for status, title in sections.items() %}
+    <div class="section-title">{{ title }}</div>
 
-  <div class="section-title">Completed</div>
-  <div class="books-grid" id="completedGrid"></div>
+    <div class="books-grid">
+      {% for user_book in books if user_book.status == status %}
+        <div class="book-card position-relative">
+          <a href="{{ url_for('main.details') }}?googleid={{ user_book.book.google_id or '' }}" class="stretched-link"></a>
 
-  <div class="section-title">Wishlist</div>
-  <div class="books-grid" id="wishlistGrid"></div>
+          <form action="{{ url_for('main.delete_book', user_book_id=user_book.id) }}" method="post" class="position-absolute top-0 end-0 m-1 z-2">
+            {{ form.hidden_tag() }}
+            <button type="submit" class="btn btn-sm btn-danger">×</button>
+          </form>
+
+          <img src="{{ user_book.book.cover_url or 'https://via.placeholder.com/110x160?text=No+Cover' }}" alt="Book cover">
+          <div class="book-title" title="{{ user_book.book.title or '' }}">{{ user_book.book.title or 'No Title' }}</div>
+          <div class="book-author">{{ user_book.book.author or 'Unknown Author' }}</div>
+          <div class="book-desc">
+            {% if user_book.book.description %}
+              {{ user_book.book.description[:80]|striptags }}{% if user_book.book.description|length > 80 %}…{% endif %}
+            {% else %}
+              <span class="no-description">No description</span>
+            {% endif %}
+            
+          </div>
+        </div>
+      {% else %}
+        <p class="no-books-message">No books in this section.</p>
+      {% endfor %}
+    </div>
+  {% endfor %}
 </div>
-{% endblock %}
-
-{% block scripts %}
-
-<script src="{{ url_for('static', filename='js/library.js') }}"></script>
-
 {% endblock %}
