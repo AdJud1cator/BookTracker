@@ -3,9 +3,9 @@
 {% block title %}Dashboard - BookTracker{% endblock %}
 
 {% block head %}
-
 <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
-
+<link rel="stylesheet" href="{{ url_for('static', filename='css/community.css') }}">\
+<link rel="stylesheet" href="{{ url_for('static', filename='css/library.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -30,7 +30,36 @@
             <div class="icon">📊</div>
             <div class="title">Statistics</div>
             <div class="desc">Track your reading progress and view personalized stats.</div>
-        </a>
+        </a>      
+    </div>
+
+
+    <div class="container my-5 p-4 rounded bg-body row g-4">
+        <!-- News Feed -->
+        <div class="community-card h-100 p-3 col-md-6">
+            <div class="section-title">Your News Feed</div>
+            {% if has_feed %}
+                <div id="feedList" class="feed-list"></div>
+                <div id="feedPagination" class="feed-pagination"></div>
+            {% else %}
+                <div class="text-muted">Your news feed is empty. Start sharing books to get started.</div>
+            {% endif %}
+        </div>
+            
+        <!-- Currently Reading -->
+        <div class="community-card h-100 p-3 col-md-6">
+            <div class="section-title mb-3">Currently Reading</div>
+            {% if has_currently_reading %}
+                <div class="books-grid" id="currentlyReadingGrid"></div>
+            {% else %}
+                <div class="text-muted">Not currently reading any books.</div>
+            {% endif %}
+        </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/community.js') }}"></script>
+<script src="{{ url_for('static', filename='js/library.js') }}"></script>
 {% endblock %}

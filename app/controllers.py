@@ -117,6 +117,7 @@ def delete_book(user_book_id):
     flash("Book deleted successfully.", "success")
     return redirect(url_for('main.library'))
   
+>>>>>>> main
 # ----------------- Book Sharing APIs -----------------
 
 @bp.route('/share_book', methods=['POST'])

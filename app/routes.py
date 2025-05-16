@@ -152,7 +152,25 @@ def forgot(): return render_template("forgot.html")
 
 @bp.route('/dashboard')
 @login_required
-def dashboard(): return render_template("dashboard.html", active_page='dashboard')
+def dashboard(): 
+    feed_items = BookShare.query\
+        .filter(
+            (BookShare.from_user_id == current_user.id) |
+            (BookShare.to_user_id == current_user.id)
+        )\
+        .order_by(BookShare.timestamp.desc())\
+        .limit(10).all()
+
+    has_feed = len(feed_items) > 0
+
+    currently_reading_books = UserBook.query\
+        .filter(UserBook.user_id == current_user.id, UserBook.status == 'currently_reading')\
+        .all()
+
+    has_currently_reading = len(currently_reading_books) > 0
+
+    return render_template("dashboard.html", active_page='dashboard', has_feed=has_feed, has_currently_reading=has_currently_reading)
+
 @bp.route('/explore')
 @login_required
 def explore(): return render_template("explore.html", active_page='explore')
