@@ -133,7 +133,7 @@ function showCommunityLoadingBar() {
 
 function hideCommunityLoadingBar() {
     document.getElementById('communityLoadingBar').style.display = 'none';
-    document.getElementById('feedList').style.display = 'block';
+    document.getElementById('feedList').style.display = 'flex';
 }
 
 function loadFeed(page = 1) {
