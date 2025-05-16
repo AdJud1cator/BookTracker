@@ -1,7 +1,8 @@
-from app import create_app
+from flask_migrate import Migrate
+from app import create_app, db
+from config import DeploymentConfig
 
-app = create_app()
-
-# To run the application, use the command: python run.py
 if __name__ == '__main__':
+    app = create_app(DeploymentConfig)
+    migrate = Migrate(app, db)
     app.run(debug=True)

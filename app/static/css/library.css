@@ -68,6 +68,16 @@
     margin-bottom: 0.5rem;
 }
 
+.no-books-message {
+    text-align: center;
+    color: var(--bs-secondary-color, #6c757d);
+    width: 100%;
+}
+
+.no-description {
+    color: var(--bs-secondary-color, #6c757d);
+}
+
 @media (max-width: 900px) {
     .book-card {
         flex: 1 1 45%;

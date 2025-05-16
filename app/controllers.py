@@ -1,8 +1,8 @@
-from flask import request, jsonify
+from flask import request, jsonify, redirect, url_for, flash
 from flask_login import login_required, current_user
 from .models import User, UserBook, Book, BookShare
 from . import db
-from app.routes import bp
+from app.blueprints import bp
 from sqlalchemy import desc, func
 import calendar
 from collections import defaultdict
@@ -103,7 +103,21 @@ def add_book():
     db.session.commit()
     return jsonify({"success": True, "message": message})
 
+# ----------------- Delete Book API -----------------
 
+@bp.route('/delete_book/<int:user_book_id>', methods=['POST'])
+@login_required
+def delete_book(user_book_id):
+    user_book = UserBook.query.get_or_404(user_book_id)
+    if user_book.user_id != current_user.id:
+        flash("Unauthorized access.", "danger")
+        return redirect(url_for('main.library'))
+    db.session.delete(user_book)
+    db.session.commit()
+    flash("Book deleted successfully.", "success")
+    return redirect(url_for('main.library'))
+  
+>>>>>>> main
 # ----------------- Book Sharing APIs -----------------
 
 @bp.route('/share_book', methods=['POST'])
@@ -161,10 +175,11 @@ def community_feed():
         feed.append({
             'title': book.title,
             'cover_url': book.cover_url,
-            'status': share.status,
+            'status': share.status.title(),
             'from_username': share.from_user.username,
             'to_username': share.to_user.username,
             'timestamp': share.timestamp.strftime('%Y-%m-%d %H:%M'),
+            'google_id': book.google_id
         })
 
     return jsonify({

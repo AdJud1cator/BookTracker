@@ -87,3 +87,11 @@
     color: var(--bs-secondary-color);
     text-align: center;
 }
+
+/* Dark mode styles */
+
+[data-bs-theme="dark"] .book-card {
+    background-color: #2e3236;
+    color: #f8f9fa;
+    border-color: transparent;
+}

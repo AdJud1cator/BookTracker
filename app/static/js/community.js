@@ -107,7 +107,9 @@ function renderFeed(feed, page, pages) {
         } else {
             message = `<b>${item.from_username}</b> shared <b>${item.title}</b> with <b>${item.to_username}</b> on <span>${item.timestamp}</span>`;
         }
-
+        const detailsUrl = `/details?googleid=${item.google_id}`;
+        div.onclick = () => window.location.href = detailsUrl;
+        div.style.cursor = 'pointer';
         div.innerHTML = `
             <img class="feed-book-cover" src="${item.cover_url || 'https://via.placeholder.com/70x100?text=No+Cover'}" alt="Book cover">
             <div class="feed-book-info">
@@ -135,15 +137,25 @@ function renderFeed(feed, page, pages) {
     }
 }
 
+function showCommunityLoadingBar() {
+    document.getElementById('communityLoadingBar').style.display = 'block';
+    document.getElementById('feedList').style.display = 'none';
+}
+
+function hideCommunityLoadingBar() {
+    document.getElementById('communityLoadingBar').style.display = 'none';
+    document.getElementById('feedList').style.display = 'flex';
+}
+
 function loadFeed(page = 1) {
     const feedList = document.getElementById('feedList');
     const feedPagination = document.getElementById('feedPagination');
-    if (feedList) feedList.innerHTML = '<div class="text-muted">Loading...</div>';
-    if (feedPagination) feedPagination.innerHTML = '';
-
+    showCommunityLoadingBar();
+    feedPagination.innerHTML = '';
     fetch(`/community_feed?page=${page}`)
         .then(res => res.json())
         .then(data => {
+            hideCommunityLoadingBar();
             renderFeed(data.feed, data.page, data.pages);
         });
 }
