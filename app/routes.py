@@ -155,7 +155,7 @@ def explore(): return render_template("explore.html", active_page='explore')
 def library():
     user_books = UserBook.query.filter_by(user_id=current_user.id).all()
     form = DeleteBookForm()
-    return render_template('library.html', books=user_books, form=form)
+    return render_template('library.html', active_page='library', books=user_books, form=form)
 
 @bp.route('/statistics')
 @login_required
