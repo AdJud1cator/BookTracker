@@ -1,5 +1,6 @@
-from flask import render_template, request, redirect, url_for, flash
+from flask import jsonify, render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
+from flask_wtf.csrf import generate_csrf
 from .models import User, UserBook
 from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -170,3 +171,7 @@ def details():
     if not googleid:
         return "No book ID provided.", 400
     return render_template('details.html', googleid=googleid)
+
+@bp.route('/csrf-token', methods=['GET'])
+def csrf_token():
+    return jsonify({'csrf_token': generate_csrf()})
