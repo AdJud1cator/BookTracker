@@ -135,7 +135,7 @@ def delete_book(user_book_id):
     db.session.delete(user_book)
     db.session.commit()
     return jsonify({'success': True})
-
+  
 # ----------------- Book Sharing APIs -----------------
 
 @bp.route('/share_book', methods=['POST'])
