@@ -28,9 +28,6 @@ def create_app(config):
     def load_user(user_id):
         return User.query.get(int(user_id))
 
-    # from app import routes 
-    # from app import controllers 
-
     register_error_handlers(app)
 
     csrf.init_app(app)
