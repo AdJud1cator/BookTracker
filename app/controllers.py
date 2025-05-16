@@ -178,6 +178,7 @@ def community_feed():
             'from_username': share.from_user.username,
             'to_username': share.to_user.username,
             'timestamp': share.timestamp.strftime('%Y-%m-%d %H:%M'),
+            'google_id': book.google_id
         })
 
     return jsonify({
