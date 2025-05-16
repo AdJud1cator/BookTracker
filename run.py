@@ -5,4 +5,4 @@ from config import DeploymentConfig
 if __name__ == '__main__':
     app = create_app(DeploymentConfig)
     migrate = Migrate(app, db)
-    app.run(debug=True)
+    app.run(debug=False)

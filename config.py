@@ -4,7 +4,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 default_database_uri = 'sqlite:///' + os.path.join(basedir, 'app.db')
 
 class Config:
-    SECRET_KEY = os.environ.get("SECRET_KEY", "fallback-secret-key")
+    SECRET_KEY = os.environ.get("SECRET_KEY")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     WTF_CSRF_ENABLED = True
     WTF_CSRF_METHODS = ["POST", "PUT", "PATCH", "DELETE"]
