@@ -1,11 +1,12 @@
 from flask import jsonify, render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from flask_wtf.csrf import generate_csrf
-from .models import User, UserBook
+from .models import User, UserBook, BookShare
 from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
 import re
-from app.forms import RegistrationForm, LoginForm, DeleteBookForm
+from .forms import RegistrationForm, LoginForm
+from .controllers import delete_book
 from .blueprints import bp
 
 # ----------------- Registration -----------------
@@ -98,6 +99,13 @@ def logout():
     flash('You have been logged out.', 'info')
     return redirect(url_for('main.homepage'))
 
+# ----------------- Delete Book -----------------
+
+@bp.route('/delete_book/<int:user_book_id>', methods=['DELETE'])
+@login_required
+def delete_book_route(user_book_id):
+    return delete_book(user_book_id)
+
 
 # ----------------- Static Pages -----------------
 
@@ -179,8 +187,7 @@ def explore(): return render_template("explore.html", active_page='explore')
 @login_required
 def library():
     user_books = UserBook.query.filter_by(user_id=current_user.id).all()
-    form = DeleteBookForm()
-    return render_template('library.html', active_page='library', books=user_books, form=form)
+    return render_template('library.html', active_page='library', books=user_books)
 
 @bp.route('/statistics')
 @login_required
