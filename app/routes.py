@@ -144,7 +144,6 @@ def forgot(): return render_template("forgot.html")
 @bp.route('/dashboard')
 @login_required
 def dashboard(): 
-    # Fetch the news feed for the current user
     feed_items = BookShare.query\
         .filter(
             (BookShare.from_user_id == current_user.id) |
@@ -153,10 +152,15 @@ def dashboard():
         .order_by(BookShare.timestamp.desc())\
         .limit(10).all()
 
-    # Check if there are any items in the feed
     has_feed = len(feed_items) > 0
 
-    return render_template("dashboard.html", active_page='dashboard', has_feed=has_feed)
+    currently_reading_books = UserBook.query\
+        .filter(UserBook.user_id == current_user.id, UserBook.status == 'currently_reading')\
+        .all()
+
+    has_currently_reading = len(currently_reading_books) > 0
+
+    return render_template("dashboard.html", active_page='dashboard', has_feed=has_feed, has_currently_reading=has_currently_reading)
 
 @bp.route('/explore')
 @login_required

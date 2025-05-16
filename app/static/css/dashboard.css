@@ -51,3 +51,11 @@
         align-items: center;
     }
 }
+
+.community-card {
+    min-height: 300px;
+}
+
+.section-title {
+    margin-top: 0;
+}
