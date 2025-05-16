@@ -1,7 +1,7 @@
 from flask import jsonify, render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from flask_wtf.csrf import generate_csrf
-from .models import User, UserBook
+from .models import User, UserBook, BookShare
 from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
 import re
@@ -106,7 +106,6 @@ def logout():
 def delete_book_route(user_book_id):
     return delete_book(user_book_id)
 
-
 # ----------------- Static Pages -----------------
 
 @bp.route('/')
@@ -203,6 +202,8 @@ def details():
     if not googleid:
         return "No book ID provided.", 400
     return render_template('details.html', googleid=googleid)
+
+# ----------------- CSRF Token -----------------
 
 @bp.route('/csrf-token', methods=['GET'])
 def csrf_token():
