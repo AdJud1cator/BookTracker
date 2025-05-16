@@ -136,6 +136,13 @@ def copyright():
     else:
         base_template = "base_anon.html"
     return render_template("copyright.html", base_template=base_template)
+@bp.route('/faq')
+def faq(): 
+    if current_user.is_authenticated:
+        base_template = "base_member.html"
+    else:
+        base_template = "base_anon.html"
+    return render_template("faq.html", base_template=base_template)
 
 @bp.route('/forgot')
 def forgot(): return render_template("forgot.html")

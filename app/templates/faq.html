@@ -1,48 +1,60 @@
-{% extends "base.html" %}
+{% extends base_template %}
 
-{% block head %}
-<title>FAQ | Book Tracker</title>
+{% block title %}
+FAQ | Book Tracker
 {% endblock %}
 
-{% block body %}
+{% block content %}
+<div class="container min-vh-100 d-flex justify-content-center align-items-center">
+    <div class="px-3 px-md-5 py-4 py-md-5 rounded shadow w-100" style="max-width: 960px;">
 
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
-    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-3xl">
-        <h1 class="text-3xl font-bold mb-6 flex items-center justify-center">
-            <img src="{{ url_for('static', filename='img/BookTracker.png') }}" alt="BookTracker Logo" class="w-8 h-8 mr-2">
-            <span>Frequently Asked Questions</span>
+        <h1 class="h3 fw-bold mb-4 text-center d-flex align-items-center justify-content-center">
+            <img src="{{ url_for('static', filename='img/BookTracker.png') }}" alt="BookTracker Logo" class="me-2"
+                style="height: 32px;">
+            Frequently Asked Questions
         </h1>
 
-        <h2 class="text-2xl font-semibold mt-6 mb-2">What is Book Tracker?</h2>
-        <p class="mb-4">
-            Book Tracker is a platform designed to help you manage and track your reading habits, organize your book collection, and discover new books.
+        <blockquote class="border-start border-primary ps-3 fst-italic text-muted mb-4">
+            "Here are the answers to some of the most common questions about BookTracker."
+        </blockquote>
+
+        <h2 class="h5 fw-semibold mt-4">What is BookTracker?</h2>
+        <p class="mb-3">
+            BookTracker is a platform designed to help you manage and track your reading habits, organize your book
+            collection, and discover new books.
         </p>
 
-        <h2 class="text-2xl font-semibold mt-6 mb-2">How do I create an account?</h2>
-        <p class="mb-4">
-            You can create an account by clicking on the "Sign Up" button on the homepage and filling out the registration form with your details.
+        <h2 class="h5 fw-semibold mt-4">How do I create an account?</h2>
+        <p class="mb-3">
+            You can create an account by clicking on the "Sign Up" button on the homepage and filling out the
+            registration form with your details.
         </p>
 
-        <h2 class="text-2xl font-semibold mt-6 mb-2">Is Book Tracker free to use?</h2>
-        <p class="mb-4">
-            Yes, Book Tracker offers a free plan with essential features. Additional premium features may be available through a subscription.
+        <h2 class="h5 fw-semibold mt-4">Is BookTracker free to use?</h2>
+        <p class="mb-3">
+            Yes, BookTracker offers a free plan with essential features. Additional premium features may be available
+            through a subscription.
         </p>
 
-        <h2 class="text-2xl font-semibold mt-6 mb-2">How can I reset my password?</h2>
-        <p class="mb-4">
-            If you forgot your password, click on the "Forgot Password" link on the login page and follow the instructions to reset it.
+        <h2 class="h5 fw-semibold mt-4">How can I reset my password?</h2>
+        <p class="mb-3">
+            If you forgot your password, click on the "Forgot Password" link on the login page and follow the
+            instructions to reset it.
         </p>
 
-        <h2 class="text-2xl font-semibold mt-6 mb-2">Can I share my book collection with others?</h2>
-        <p class="mb-4">
-            Yes, you can share your book collection with friends by enabling the sharing option in your account settings.
+        <h2 class="h5 fw-semibold mt-4">Can I share my book collection with others?</h2>
+        <p class="mb-3">
+            Yes, you can share books that you have read or plan on reading with your friends in our community page.
         </p>
 
-        <h2 class="text-2xl font-semibold mt-6 mb-2">How do I contact support?</h2>
-        <p class="mb-4">
-            If you have any questions or need assistance, please contact us at <a href="mailto: info@booktracker.com" class="text-blue-500 underline"> info@booktracker.com</a>.
+        <h2 class="h5 fw-semibold mt-4">How do I contact support?</h2>
+        <p class="mb-0">
+            If you have any questions or need assistance, please contact us at
+            <a href="mailto:info@booktracker.com"
+                class="text-decoration-underline text-primary">info@booktracker.com</a> or reach us <a
+                href="{{ url_for('main.contact') }}" class="text-decoration-underline text-primary">here</a>
         </p>
     </div>
-</body>
+</div>
 
 {% endblock %}
