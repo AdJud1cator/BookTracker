@@ -9,13 +9,19 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!confirmed) return;
 
       try {
+        const tokenRes = await fetch('/csrf-token');
+        const tokenData = await tokenRes.json();
+
         const res = await fetch(`/delete_book/${userBookId}`, {
           method: "DELETE",
           headers: {
-            "Content-Type": "application/json"
+            "X-CSRFToken": tokenData.csrf_token
           }
         });
 
+
+
+        
         if (!res.ok) {
           const data = await res.json();
           alert(data.error || "An error occurred while deleting the book.");

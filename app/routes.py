@@ -106,7 +106,6 @@ def logout():
 def delete_book_route(user_book_id):
     return delete_book(user_book_id)
 
-
 # ----------------- Static Pages -----------------
 
 @bp.route('/')
@@ -203,6 +202,8 @@ def details():
     if not googleid:
         return "No book ID provided.", 400
     return render_template('details.html', googleid=googleid)
+
+# ----------------- CSRF Token -----------------
 
 @bp.route('/csrf-token', methods=['GET'])
 def csrf_token():
