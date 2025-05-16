@@ -37,22 +37,36 @@
     <div class="container my-5 p-4 rounded bg-body row g-4">
         <!-- News Feed -->
         <div class="community-card h-100 p-3 col-md-6">
-            <div class="section-title">Your News Feed</div>
             {% if has_feed %}
-                <div id="feedList" class="feed-list"></div>
-                <div id="feedPagination" class="feed-pagination"></div>
+                <div class="section-title">Your News Feed</div>
+                <ul class="feed-list">
+                    {% for item in feed_items %}
+                    <li>
+                        Book ID {{ item.book_id }} was shared from User {{ item.from_user_id }} to User {{ item.to_user_id }} at {{ item.timestamp }}
+                    </li>
+                    {% endfor %}
+                </ul>
             {% else %}
-                <div class="text-muted">Your news feed is empty. Start sharing books to get started.</div>
+                <p>No recent activity in your feed.</p>
             {% endif %}
+
         </div>
             
         <!-- Currently Reading -->
         <div class="community-card h-100 p-3 col-md-6">
-            <div class="section-title mb-3">Currently Reading</div>
             {% if has_currently_reading %}
-                <div class="books-grid" id="currentlyReadingGrid"></div>
+                <div class="section-title">Currently Reading</div>
+                <div class="books-grid">
+                    {% for user_book in currently_reading_books %}
+                    <div class="book-card">
+                        <img src="{{ user_book.book.cover_url }}" alt="{{ user_book.book.title }} cover" />
+                        <div class="book-title">{{ user_book.book.title }}</div>
+                        <div class="book-author">{{ user_book.book.author }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
             {% else %}
-                <div class="text-muted">Not currently reading any books.</div>
+                <p>You are not currently reading any books.</p>
             {% endif %}
         </div>
     </div>
