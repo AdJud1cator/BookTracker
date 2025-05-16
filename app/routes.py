@@ -1,7 +1,7 @@
 from flask import jsonify, render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from flask_wtf.csrf import generate_csrf
-from .models import User, UserBook
+from .models import User, UserBook, BookShare
 from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
 import re
