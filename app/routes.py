@@ -176,7 +176,13 @@ def dashboard():
 
     has_currently_reading = len(currently_reading_books) > 0
 
-    return render_template("dashboard.html", active_page='dashboard', has_feed=has_feed, has_currently_reading=has_currently_reading)
+    return render_template("dashboard.html", 
+                           active_page = 'dashboard', 
+                           has_feed = has_feed, 
+                           has_currently_reading = has_currently_reading, 
+                           currently_reading_books = currently_reading_books,
+                           feed_items=feed_items
+                           )
 
 @bp.route('/explore')
 @login_required
