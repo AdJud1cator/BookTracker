@@ -2,10 +2,12 @@ from flask import Flask, Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from flask_wtf import CSRFProtect
 from .errors import register_error_handlers
 
 db = SQLAlchemy()
 login_manager = LoginManager()
+csrf = CSRFProtect()
 
 def create_app(config):
     app = Flask(__name__)
@@ -28,5 +30,7 @@ def create_app(config):
     # from app import controllers 
 
     register_error_handlers(app)
+
+    csrf.init_app(app)
 
     return app
