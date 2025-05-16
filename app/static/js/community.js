@@ -126,25 +126,14 @@ function renderFeed(feed, page, pages) {
     }
 }
 
-function showCommunityLoadingBar() {
-    document.getElementById('communityLoadingBar').style.display = 'block';
-    document.getElementById('feedList').style.display = 'none';
-}
-
-function hideCommunityLoadingBar() {
-    document.getElementById('communityLoadingBar').style.display = 'none';
-    document.getElementById('feedList').style.display = 'flex';
-}
-
 function loadFeed(page = 1) {
     const feedList = document.getElementById('feedList');
     const feedPagination = document.getElementById('feedPagination');
-    showCommunityLoadingBar();
+    feedList.innerHTML = '<div class="text-muted">Loading...</div>';
     feedPagination.innerHTML = '';
     fetch(`/community_feed?page=${page}`)
         .then(res => res.json())
         .then(data => {
-            hideCommunityLoadingBar();
             renderFeed(data.feed, data.page, data.pages);
         });
 }
