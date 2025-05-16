@@ -96,6 +96,9 @@ function renderFeed(feed, page, pages) {
         } else {
             message = `<b>${item.from_username}</b> shared <b>${item.title}</b> with <b>${item.to_username}</b> on <span>${item.timestamp}</span>`;
         }
+        const detailsUrl = `/details?googleid=${item.google_id}`;
+        div.onclick = () => window.location.href = detailsUrl;
+        div.style.cursor = 'pointer';
         div.innerHTML = `
             <img class="feed-book-cover" src="${item.cover_url || 'https://via.placeholder.com/70x100?text=No+Cover'}" alt="Book cover">
             <div class="feed-book-info">
