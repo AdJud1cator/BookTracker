@@ -69,10 +69,55 @@
 {% endblock %}
 
 {% block content %}
-<div class="library-section py-4 px-3 min-vh-100">
+<div class="container py-4 min-vh-100">
+<div class="mx-auto" style="max-width: 800px;">
   <h3 class="fw-semibold mb-3">Last Read / Currently Reading</h3>
   <div id="lastReadSection" class="mb-4"></div>
-  <div class="dropdown-section accordion" id="libraryAccordion">
+
+  <div class="accordion" id="libraryAccordion">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingCurrent">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCurrent"
+        aria-expanded="true" aria-controls="collapseCurrent">
+        Currently Reading
+      </button>
+    </h2>
+    <div id="collapseCurrent" class="accordion-collapse collapse show" aria-labelledby="headingCurrent"
+      data-bs-parent="#libraryAccordion">
+      <div class="accordion-body" id="currentlyReadingList"></div>
+    </div>
+  </div>
+
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingCompleted">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+        data-bs-target="#collapseCompleted" aria-expanded="false" aria-controls="collapseCompleted">
+        Completed
+      </button>
+    </h2>
+    <div id="collapseCompleted" class="accordion-collapse collapse" aria-labelledby="headingCompleted"
+      data-bs-parent="#libraryAccordion">
+      <div class="accordion-body" id="completedList"></div>
+    </div>
+  </div>
+
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingWishlist">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+        data-bs-target="#collapseWishlist" aria-expanded="false" aria-controls="collapseWishlist">
+        Wishlist
+      </button>
+    </h2>
+    <div id="collapseWishlist" class="accordion-collapse collapse" aria-labelledby="headingWishlist"
+      data-bs-parent="#libraryAccordion">
+      <div class="accordion-body" id="wishlistList"></div>
+    </div>
+  </div>
+</div>
+
+
+
+  <!-- <div class="dropdown-section accordion" id="libraryAccordion">
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingCurrent">
         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCurrent"
@@ -109,49 +154,65 @@
         <div class="accordion-body" id="wishlistList"></div>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>
+</div>
+
 {% endblock %}
 
 {% block scripts %}
 <script>
-  function renderLastRead(books) {
-    const section = document.getElementById('lastReadSection');
-    let book = books.find(b => b.status === 'currently_reading') || books[0];
-    if (!book) {
-      section.innerHTML = '<div class="text-muted">No books in your library yet.</div>';
-      return;
-    }
-    section.innerHTML = `
-        <div class="book-mini">
-            <img src="${book.cover_url}" alt="Book cover">
-            <div>
-                <div class="book-title" title="${book.title}">${book.title}</div>
-                <div class="book-author">${book.author}</div>
-                <a href="/details?googleid=${book.google_id}" class="btn btn-outline-primary btn-sm mt-2">Details</a>
-            </div>
-        </div>
-    `;
+function renderLastRead(books) {
+  const section = document.getElementById('lastReadSection');
+  const book = books.find(b => b.status === 'currently_reading') || books[0];
+
+  if (!book) {
+    section.innerHTML = '<div class="text-muted">No books in your library yet.</div>';
+    return;
   }
 
-  function renderBookList(books, status, containerId) {
-    const list = books.filter(b => b.status === status);
-    const container = document.getElementById(containerId);
-    if (list.length === 0) {
-      container.innerHTML = '<div class="text-muted">No books in this section.</div>';
-      return;
-    }
-    container.innerHTML = list.map(book => `
-        <div class="book-list-item">
-            <img src="${book.cover_url}" alt="Book cover">
-            <div>
-                <div class="book-title" title="${book.title}">${book.title}</div>
-                <div class="book-author">${book.author}</div>
-                <a href="/details?googleid=${book.google_id}" class="btn btn-outline-primary btn-sm mt-1">Details</a>
-            </div>
+  section.innerHTML = `
+    <div class="card border-0 shadow-sm mb-3">
+      <div class="row g-3 align-items-center p-3">
+        <div class="col-auto">
+          <img src="${book.cover_url}" alt="Book cover" class="img-fluid rounded" style="width: 60px; height: 90px; object-fit: cover;">
         </div>
-    `).join('');
+        <div class="col">
+          <div class="fw-semibold text-truncate" title="${book.title}">${book.title}</div>
+          <div class="text-primary small">${book.author}</div>
+          <a href="/details?googleid=${book.google_id}" class="btn btn-outline-primary btn-sm mt-2">Details</a>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+
+function renderBookList(books, status, containerId) {
+  const list = books.filter(b => b.status === status);
+  const container = document.getElementById(containerId);
+
+  if (list.length === 0) {
+    container.innerHTML = '<div class="text-muted">No books in this section.</div>';
+    return;
   }
+
+  container.innerHTML = list.map(book => `
+    <div class="card mb-3 border-0 border-bottom pb-2">
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <img src="${book.cover_url}" class="img-fluid" style="width: 45px; height: 65px; object-fit: cover; border-radius: 0.25rem;" alt="Book cover">
+        </div>
+        <div class="col">
+          <div class="fw-semibold text-truncate">${book.title}</div>
+          <div class="text-primary small">${book.author}</div>
+          <a href="/details?googleid=${book.google_id}" class="btn btn-outline-primary btn-sm mt-1">Details</a>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
 
   function loadLibrary() {
     fetch('/my_books')

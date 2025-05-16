@@ -15,8 +15,8 @@
 
   .book-cover {
     width: 150px;
-    height: 220px;
-    object-fit: cover;
+    height: auto;
+    object-fit: contain;
     border-radius: 0.25rem;
     margin-right: 2rem;
   }
@@ -49,7 +49,8 @@
 
 {% block content %}
 
-<div class="book-details-container shadow-sm bg-body position-relative">
+<div class="container mt-4 mb-5 min-vh-100">
+  <div class="book-details-container shadow-sm bg-body position-relative">
   <!-- Close Button in top left -->
   <a href="{{ request.referrer or url_for('main.homepage') }}" 
      class="btn-close position-absolute" 
@@ -57,11 +58,19 @@
      aria-label="Close" title="Back"></a>
 
   <!-- Main content starts below the X button -->
-  <div class="d-flex book-details-flex mt-5 pt-2">
+  <div class="row g-4 align-items-start mt-5 pt-2">
+    
+    <div class="col-auto py-2">
+      <img id="bookCover" 
+          src="" 
+          alt="Book cover" 
+          class="img-fluid rounded" 
+          style="max-width: 150px; height: auto; object-fit: contain;">
+    </div>
 
-    <img id="bookCover" class="book-cover" src="" alt="Book cover">
-    <div class="book-meta">
+    <div class="col">
       <h2 id="bookTitle" class="fw-semibold text-primary"></h2>
+
       <div class="mb-2"><strong>Authors:</strong> <span id="bookAuthors"></span></div>
       <div class="mb-2"><strong>Publisher:</strong> <span id="bookPublisher"></span></div>
       <div class="mb-2"><strong>Published:</strong> <span id="bookPublished"></span></div>
@@ -73,10 +82,12 @@
         <span id="bookRating"></span>
         <small id="ratingsCount" class="text-muted"></small>
       </div>
-      
+
       <div class="mb-2"><strong>ISBN:</strong> <span id="bookISBN"></span></div>
     </div>
   </div>
+
+
   <hr>
   <div class="mb-4">
     <h5>Add to your Library</h5>
@@ -87,77 +98,96 @@
     </div>
     <div id="statusMessage" class="mt-3"></div>
   </div>
-  <div class="mb-3">
-    <h5>Description</h5>
-    <div id="bookDescription" style="white-space: pre-line;"></div>
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Description</h5>
+      <p id="bookDescription" class="card-text" style="white-space: pre-line;"></p>
+    </div>
+      <a id="previewLink" href="#" target="_blank" class="btn btn-link">Preview on Google Books</a>
   </div>
-  
-  <a id="previewLink" href="#" target="_blank" class="btn btn-link">Preview on Google Books</a>
+
+</div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-  const googleid = "{{ googleid }}";
-  let bookTitle = "", bookAuthors = "", bookCover = "", bookDesc = "", bookGenre = "", pageCount = null;
+  <script>
+    const googleid = "{{ googleid }}";
+    let bookTitle = "", bookAuthors = "", bookCover = "", bookDesc = "", bookGenre = "", pageCount = null;
 
-  async function fetchBookDetails() {
-    const url = `https://www.googleapis.com/books/v1/volumes/${googleid}`;
-    const resp = await fetch(url);
-    const data = await resp.json();
-    return data;
-  }
-
-  function displayBookDetails(book) {
-    const info = book.volumeInfo || {};
-    bookTitle = info.title || 'No Title';
-    bookAuthors = (info.authors && info.authors.join(', ')) || 'Unknown Author';
-    bookCover = (info.imageLinks && info.imageLinks.thumbnail) || 'https://via.placeholder.com/150x220?text=No+Cover';
-    bookDesc = info.description || '';
-    bookGenre = (info.categories && info.categories.length > 0) ? info.categories[0].split('/')[0].trim(): 'Uncategorised';
-    pageCount = info.pageCount || null;
-
-    document.getElementById('bookCover').src = bookCover;
-    document.getElementById('bookTitle').textContent = bookTitle;
-    document.getElementById('bookAuthors').textContent = bookAuthors;
-    document.getElementById('bookPublisher').textContent = info.publisher || 'Unknown Publisher';
-    document.getElementById('bookPublished').textContent = info.publishedDate || 'Unknown Date';
-    document.getElementById('bookPages').textContent = info.pageCount || 'Unknown';
-    document.getElementById('bookCategories').textContent = bookGenre;
-    let isbn = '-';
-    if (info.industryIdentifiers && info.industryIdentifiers.length) {
-      isbn = info.industryIdentifiers.map(i => i.identifier).join(', ');
+    async function fetchBookDetails() {
+      const url = `https://www.googleapis.com/books/v1/volumes/${googleid}`;
+      const resp = await fetch(url);
+      const data = await resp.json();
+      return data;
     }
-    document.getElementById('bookISBN').textContent = isbn;
-    document.getElementById('bookDescription').innerHTML = bookDesc || 'No description available.';
-    document.getElementById('previewLink').href = (info.previewLink || '#');
-  }
+    function displayBookDetails(book) {
+      const info = book.volumeInfo || {};
+      bookTitle = info.title || 'No Title';
+      bookAuthors = (info.authors && info.authors.join(', ')) || 'Unknown Author';
+      bookCover = (info.imageLinks && info.imageLinks.thumbnail) || 'https://via.placeholder.com/150x220?text=No+Cover';
+      bookDesc = info.description || '';
+      bookGenre = (info.categories && info.categories.length > 0) ? info.categories[0].split('/')[0].trim(): 'Uncategorised';
+      pageCount = info.pageCount || null;
 
-  function setStatus(status) {
-    fetch("/add_book", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        google_id: googleid,
-        title: bookTitle,
-        author: bookAuthors,
-        description: bookDesc,
-        cover_url: bookCover,
-        genre: bookGenre,
-        page_count: pageCount,
-        status: status
+      document.getElementById('bookCover').src = bookCover;
+      document.getElementById('bookTitle').textContent = bookTitle;
+      document.getElementById('bookAuthors').textContent = bookAuthors;
+      document.getElementById('bookPublisher').textContent = info.publisher || 'Unknown Publisher';
+      document.getElementById('bookPublished').textContent = info.publishedDate || 'Unknown Date';
+      document.getElementById('bookPages').textContent = info.pageCount || 'Unknown';
+      document.getElementById('bookCategories').textContent = bookGenre;
+
+      // Star Rating
+      const rating = info.averageRating || 0;
+      const ratingsCount = info.ratingsCount || 0;
+
+      let starsHtml = '';
+      for (let i = 1; i <= 5; i++) {
+        if (i <= Math.floor(rating)) {
+          starsHtml += '<i class="bi bi-star-fill text-warning"></i>';
+        } else if (i - rating < 1) {
+          starsHtml += '<i class="bi bi-star-half text-warning"></i>';
+        } else {
+          starsHtml += '<i class="bi bi-star text-warning"></i>';
+        }
+      }
+      document.getElementById('bookRating').innerHTML = starsHtml;
+      document.getElementById('ratingsCount').textContent = ratingsCount ? `(${ratingsCount} ratings)` : '';
+
+
+      let isbn = '-';
+      if (info.industryIdentifiers && info.industryIdentifiers.length) {
+        isbn = info.industryIdentifiers.map(i => i.identifier).join(', ');
+      }
+      document.getElementById('bookISBN').textContent = isbn;
+      document.getElementById('bookDescription').innerHTML = bookDesc || 'No description available.';
+      document.getElementById('previewLink').href = (info.previewLink || '#');
+    }
+    function setStatus(status) {
+      fetch("/add_book", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          google_id: googleid,
+          title: bookTitle,
+          author: bookAuthors,
+          description: bookDesc,
+          cover_url: bookCover,
+          genre: bookGenre,
+          page_count: pageCount,
+          status: status
+        })
       })
-    })
-    .then(response => response.json())
-    .then(data => {
-      Swal.fire({
-        icon: data.success ? 'success' : 'error',
-        title: data.message
-      });
-    });
-  }
-
-  fetchBookDetails().then(displayBookDetails);
+        .then(response => response.json())
+        .then(data => {
+          Swal.fire({
+            icon: data.success ? 'success' : 'error',
+            title: data.message
+          });
+        });
+    }
+    fetchBookDetails().then(displayBookDetails);
 </script>
 {% endblock %}
