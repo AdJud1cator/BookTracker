@@ -21,10 +21,7 @@
         <div class="book-card position-relative">
           <a href="{{ url_for('main.details') }}?googleid={{ user_book.book.google_id or '' }}" class="stretched-link"></a>
 
-          <form action="{{ url_for('main.delete_book', user_book_id=user_book.id) }}" method="post" class="position-absolute top-0 end-0 m-1 z-2">
-            {{ form.hidden_tag() }}
-            <button type="submit" class="btn btn-sm btn-danger">×</button>
-          </form>
+          <button class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 z-2 delete-book-btn" data-id="{{ user_book.id }}">×</button>
 
           <img src="{{ user_book.book.cover_url or 'https://via.placeholder.com/110x160?text=No+Cover' }}" alt="Book cover">
           <div class="book-title" title="{{ user_book.book.title or '' }}">{{ user_book.book.title or 'No Title' }}</div>
@@ -44,4 +41,9 @@
     </div>
   {% endfor %}
 </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/csrf.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/library.js') }}"></script>
 {% endblock %}

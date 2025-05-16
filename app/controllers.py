@@ -1,4 +1,4 @@
-from flask import request, jsonify, redirect, url_for, flash
+from flask import request, jsonify
 from flask_login import login_required, current_user
 from .models import User, UserBook, Book, BookShare
 from . import db
@@ -68,7 +68,6 @@ def add_book():
     genre = data.get('genre')
     page_count = data.get('page_count')
 
-    # Create or get book
     book = Book.query.filter_by(google_id=google_id).first()
     if not book:
         book = Book(
@@ -82,6 +81,29 @@ def add_book():
         )
         db.session.add(book)
         db.session.commit()
+    else:
+        # Update missing fields if they are empty
+        updated = False
+        if not book.title and title:
+            book.title = title
+            updated = True
+        if not book.author and author:
+            book.author = author
+            updated = True
+        if not book.description and description:
+            book.description = description
+            updated = True
+        if not book.cover_url and cover_url:
+            book.cover_url = cover_url
+            updated = True
+        if not book.genre and genre:
+            book.genre = genre
+            updated = True
+        if not book.page_count and page_count:
+            book.page_count = page_count
+            updated = True
+        if updated:
+            db.session.commit()
 
     # Add or update UserBook
     userbook = UserBook.query.filter_by(user_id=current_user.id, book_id=book.id).first()
@@ -105,17 +127,14 @@ def add_book():
 
 # ----------------- Delete Book API -----------------
 
-@bp.route('/delete_book/<int:user_book_id>', methods=['POST'])
 @login_required
 def delete_book(user_book_id):
     user_book = UserBook.query.get_or_404(user_book_id)
     if user_book.user_id != current_user.id:
-        flash("Unauthorized access.", "danger")
-        return redirect(url_for('main.library'))
+        return jsonify({'error': 'Unauthorized'}), 403
     db.session.delete(user_book)
     db.session.commit()
-    flash("Book deleted successfully.", "success")
-    return redirect(url_for('main.library'))
+    return jsonify({'success': True})
   
 >>>>>>> main
 # ----------------- Book Sharing APIs -----------------
